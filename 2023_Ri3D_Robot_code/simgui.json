@@ -1,0 +1,23 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/DriveTrainSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+    }
+  },
+  "NetworkTables": {
+    "LiveWindow": {
+      ".status": {
+        "open": true
+      },
+      "open": true
+    },
+    "Shuffleboard": {
+      "DriveBase": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
