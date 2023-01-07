@@ -10,13 +10,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
-
 public class Elevator extends SubsystemBase {
-  
+
   private CANSparkMax motor1;
   private CANSparkMax motor2;
 
+  private int pos;
 
   public Elevator(int motor1ID, int motor2ID) {
 
@@ -38,5 +37,13 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void setPos(int pos) {
+    this.pos = pos;
+  }
+
+  public int getPos() {
+    return pos;
   }
 }
