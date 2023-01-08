@@ -6,43 +6,32 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.Mode;
 
-public class InitArm extends CommandBase {
-  private boolean baseDone;
-  private boolean writsDone;
+public class Dup extends CommandBase {
+  /** Creates a new Dup. */
+  private int type;
   private ArmSubsystem arm;
 
-  public InitArm(ArmSubsystem arm) {
-    baseDone = false;
-    writsDone = true;
+  public Dup(Mode mode, ArmSubsystem arm) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    type = mode.getMode();
     this.arm = arm;
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.setWristPower(-0.1);
-    arm.setBasePower(-0.1);
+    if (type == 1) {// If Cone
+      arm.setPos(4);
+    } else if (type == 0) {// If Cube
+      arm.setPos(14);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!baseDone) {
-      if (arm.getBaseLimit()) {
-        arm.setBasePower(0);
-        arm.resetBaseEncoder();
-        baseDone = true;
-      }
-    }
-    if (!writsDone) {
-      if (arm.getWristLimit()) {
-        arm.setWristPower(0);
-        arm.resetWristEncoder();
-        baseDone = true;
-      }
-    }
   }
 
   // Called once the command ends or is interrupted.
@@ -53,10 +42,6 @@ public class InitArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (baseDone && writsDone) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 }

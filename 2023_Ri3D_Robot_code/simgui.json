@@ -1,8 +1,28 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [10]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [7]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ArmSubsystem": "Subsystem",
       "/LiveWindow/DriveTrainSubsystem": "Subsystem",
+      "/LiveWindow/IntakeSubsystem": "Subsystem",
+      "/LiveWindow/Mode": "Subsystem",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
     }
   },
@@ -14,7 +34,13 @@
       "open": true
     },
     "Shuffleboard": {
+      "Arm": {
+        "open": true
+      },
       "DriveBase": {
+        "open": true
+      },
+      "Intake": {
         "open": true
       },
       "open": true

@@ -20,4 +20,11 @@ public final class Constants {
     // Intake DIO
     public static final int FRONT_BEAM_BRAKE = 0;
     public static final int BACK_BEAM_BRAKE = 1;
+
+    //Arm Motors
+    public static final int BASE_MOTOR1 = 10;
+    public static final int WRIST_MOTOR = 12;
+    // Arm DIO
+    public static final int BASE_LIMIT = 2;
+    public static final int WRIST_LIMIT = 3;
 }

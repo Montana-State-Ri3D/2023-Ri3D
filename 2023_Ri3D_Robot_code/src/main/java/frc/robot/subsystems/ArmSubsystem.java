@@ -6,14 +6,16 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.sensors.HallSensor;
 
@@ -36,12 +38,23 @@ public class ArmSubsystem extends SubsystemBase {
   private HallSensor BaseLimit;
   private DigitalInput WristLimit;
 
+  private ShuffleboardTab tab;
+  private NetworkTableEntry posTelem;
+
   /** Creates a new Arm. */
-  public ArmSubsystem(int armBaseID, int armWristID) {
+  public ArmSubsystem(int armBaseID, int armWristID, int baseLimitID, int wristLimitID) {
     isIniting = true;
 
-    BaseLimit = new HallSensor(0);
-    WristLimit = new DigitalInput(1);
+    tab = Shuffleboard.getTab("Arm");
+
+
+    posTelem = tab.add("pos", 0)
+    .withPosition(0, 0)
+    .withSize(1, 1)
+    .getEntry();
+
+    BaseLimit = new HallSensor(baseLimitID);
+    WristLimit = new DigitalInput(wristLimitID);
 
     initArmBase(armBaseID);
     initArmWrist(armWristID);
@@ -84,10 +97,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   private void makeMaps() {
     BasePos = new HashMap<>();
-    WristPos.put(1, 180.8);
-    WristPos.put(2, 0.0);
-    WristPos.put(3, 0.0);
-    WristPos.put(4, 0.0);
+    BasePos.put(1, 180.8);//Storage
+    BasePos.put(2, 0.0);//Low Place
+    BasePos.put(3, 0.0);//Mid Place
+    BasePos.put(4, 0.0);//High Place
 
     WristPos = new HashMap<>();
     WristPos.put(1, 0.0);
@@ -99,10 +112,13 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
+
     if (!isIniting) {
       armWristPID.setReference(WristPos.get(pos), CANSparkMax.ControlType.kPosition);
       armBasePID.setReference(BasePos.get(pos), CANSparkMax.ControlType.kPosition);
     }
+
+    posTelem.setDefaultDouble(pos);
 
   }
 

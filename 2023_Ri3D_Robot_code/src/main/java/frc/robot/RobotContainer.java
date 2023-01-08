@@ -1,9 +1,12 @@
 package frc.robot;
 
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Dup;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Mode;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -23,10 +26,11 @@ public class RobotContainer {
   private final XboxController testController = new XboxController(Constants.TEST_CONTROLLER_PORT);
 
   private DriveTrainSubsystem driveTrainSubsystem;
+  private IntakeSubsystem intakeSubsystem;
+  private ArmSubsystem arm;
+  private Mode mode;
 
   private DriveCommand driveCommand;
-
-  private IntakeSubsystem intakeSubsystem;
 
   public RobotContainer() {
     createSubsystems(); // Create our subsystems.
@@ -35,10 +39,14 @@ public class RobotContainer {
   }
 
   private void createSubsystems() {
+    mode = new Mode();
+
     driveTrainSubsystem = new DriveTrainSubsystem(LEFT_FRONT_MOTOR,
         LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR);
     intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR,
         FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
+
+    arm = new ArmSubsystem(BASE_MOTOR1, WRIST_MOTOR,BASE_LIMIT,WRIST_LIMIT);
   }
 
   private void createCommands() {
@@ -50,6 +58,17 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
+    new JoystickButton(driveController, Button.kBack.value)
+        .whenPressed(new InstantCommand(() -> mode.setMode(0), mode));
+    new JoystickButton(driveController, Button.kStart.value)
+        .whenPressed(new InstantCommand(() -> mode.setMode(1), mode));
+
+    // Calls Dup
+    new JoystickButton(driveController, driveController.getPOV()).whenPressed(new Dup(mode, arm));
+
+    // Map Brake Mode to B
+    // new JoystickButton(driveController,
+    // driveController.getPOV(180)).whenPressed(new Ddown(mode, arm));
     // Map Toggle To A
     new JoystickButton(driveController, Button.kA.value)
         .whenPressed(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
