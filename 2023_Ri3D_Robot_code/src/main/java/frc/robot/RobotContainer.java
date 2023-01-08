@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.*;
 
@@ -30,6 +32,8 @@ public class RobotContainer {
   private ArmSubsystem arm;
   private Mode mode;
 
+  private SequentialCommandGroup ejectItem;
+
   private DriveCommand driveCommand;
 
   public RobotContainer() {
@@ -46,7 +50,7 @@ public class RobotContainer {
     intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR,
         FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
 
-    arm = new ArmSubsystem(BASE_MOTOR1, WRIST_MOTOR,BASE_LIMIT,WRIST_LIMIT);
+    // arm = new ArmSubsystem(BASE_MOTOR1, WRIST_MOTOR,BASE_LIMIT,WRIST_LIMIT);
   }
 
   private void createCommands() {
@@ -54,17 +58,23 @@ public class RobotContainer {
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
         () -> driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
+
+    ejectItem = new SequentialCommandGroup();
+    ejectItem.addCommands(new InstantCommand(() -> intakeSubsystem.intakePower(-0.7)));
+    ejectItem.addCommands(new WaitCommand(1.5));
+    ejectItem.addCommands(new InstantCommand(() -> intakeSubsystem.intakePower(0.0)));
   }
 
   private void configureButtonBindings() {
-
-    new JoystickButton(driveController, Button.kBack.value)
-        .whenPressed(new InstantCommand(() -> mode.setMode(0), mode));
-    new JoystickButton(driveController, Button.kStart.value)
-        .whenPressed(new InstantCommand(() -> mode.setMode(1), mode));
-
+    
+      new JoystickButton(driveController, Button.kBack.value)
+      .whenPressed(new InstantCommand(() -> mode.setMode(0), mode));
+      new JoystickButton(driveController, Button.kStart.value)
+      .whenPressed(new InstantCommand(() -> mode.setMode(1), mode));
+     
     // Calls Dup
-    new JoystickButton(driveController, driveController.getPOV()).whenPressed(new Dup(mode, arm));
+    // new JoystickButton(driveController, driveController.getPOV()).whenPressed(new
+    // Dup(mode, arm));
 
     // Map Brake Mode to B
     // new JoystickButton(driveController,
@@ -73,16 +83,14 @@ public class RobotContainer {
     new JoystickButton(driveController, Button.kA.value)
         .whenPressed(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
     // Map Brake Mode to B
-    new JoystickButton(driveController, Button.kB.value)
-        .whenPressed(new InstantCommand(() -> driveTrainSubsystem.setBrake(), driveTrainSubsystem));
-    // Map Coast Mode to X
-    new JoystickButton(driveController, Button.kX.value)
-        .whenPressed(new InstantCommand(() -> driveTrainSubsystem.setCoast(), driveTrainSubsystem));
 
-    new JoystickButton(driveController, Button.kLeftBumper.value).whenPressed(new IntakeCommand(intakeSubsystem, 1));
+    new JoystickButton(driveController, Button.kX.value).whenPressed(ejectItem);
 
-    new JoystickButton(driveController,
-        Button.kRightBumper.value).whenPressed(new IntakeCommand(intakeSubsystem, 0));
+    new JoystickButton(driveController, Button.kLeftBumper.value)
+        .whenPressed(new IntakeCommand(intakeSubsystem, 1, () -> driveController.getYButton()));
+
+    new JoystickButton(driveController, Button.kRightBumper.value)
+        .whenPressed(new IntakeCommand(intakeSubsystem, 0, () -> driveController.getYButton()));
   }
 
   public Command getAutonomousCommand() {
