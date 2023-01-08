@@ -30,6 +30,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private TalonSRX rightMotor_1;
   private TalonSRX rightMotor_2;
 
+  private boolean isBrake;
+
   public DriveTrainSubsystem(int IDleftMotor_1, int IDleftMotor_2, int IDrightMotor_1, int IDrightMotor_2) {
     leftMotor_1 = new TalonSRX(IDleftMotor_1);
     leftMotor_2 = new TalonSRX(IDleftMotor_2);
@@ -57,6 +59,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     leftMotor_2.follow(leftMotor_1);
     rightMotor_2.follow(rightMotor_1);
 
+    isBrake = false;
+
     // Shuffleboard setup
     tab = Shuffleboard.getTab("DriveBase");
     PowerDraw = tab.add("Curent Power Draw of Full Drive Base", 0)
@@ -77,5 +81,35 @@ public class DriveTrainSubsystem extends SubsystemBase {
   public void drive(double leftPower, double rightPower) {
     leftMotor_1.set(TalonSRXControlMode.PercentOutput, leftPower);
     rightMotor_1.set(TalonSRXControlMode.PercentOutput, rightPower);
+  }
+  public void setCoast()
+  {
+    leftMotor_1.setNeutralMode(NeutralMode.Coast);
+    leftMotor_2.setNeutralMode(NeutralMode.Coast);
+    rightMotor_1.setNeutralMode(NeutralMode.Coast);
+    rightMotor_2.setNeutralMode(NeutralMode.Coast);
+
+    isBrake = false;
+  }
+
+  public void setBrake()
+  {
+    leftMotor_1.setNeutralMode(NeutralMode.Brake);
+    leftMotor_2.setNeutralMode(NeutralMode.Brake);
+    rightMotor_1.setNeutralMode(NeutralMode.Brake);
+    rightMotor_2.setNeutralMode(NeutralMode.Brake);
+
+    isBrake = true;
+  }
+
+  public void toggleMode()
+  {
+    if(isBrake){
+      setCoast();
+    }
+    else
+    {
+      setBrake();
+    }
   }
 }

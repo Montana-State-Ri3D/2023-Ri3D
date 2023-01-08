@@ -13,4 +13,11 @@ public final class Constants {
     public static final int LEFT_BACK_MOTOR = 2;
     public static final int RIGHT_FRONT_MOTOR = 3;
     public static final int RIGHT_BACK_MOTOR = 4;
+
+    // Intake Motors
+    public static final int INTAKE_LEFT_MOTOR = 7;
+    public static final int INTAKE_RIGHT_MOTOR = 8;
+    // Intake DIO
+    public static final int FRONT_BEAM_BRAKE = 0;
+    public static final int BACK_BEAM_BRAKE = 1;
 }
