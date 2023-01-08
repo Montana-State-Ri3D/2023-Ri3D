@@ -66,12 +66,12 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    /*
-     * new JoystickButton(driveController, Button.kBack.value)
-     * .whenPressed(new InstantCommand(() -> mode.setMode(0), mode));
-     * new JoystickButton(driveController, Button.kStart.value)
-     * .whenPressed(new InstantCommand(() -> mode.setMode(1), mode));
-     */
+    
+      new JoystickButton(driveController, Button.kBack.value)
+      .whenPressed(new InstantCommand(() -> mode.setMode(0), mode));
+      new JoystickButton(driveController, Button.kStart.value)
+      .whenPressed(new InstantCommand(() -> mode.setMode(1), mode));
+     
     // Calls Dup
     // new JoystickButton(driveController, driveController.getPOV()).whenPressed(new
     // Dup(mode, arm));

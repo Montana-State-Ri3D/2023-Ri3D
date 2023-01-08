@@ -15,13 +15,13 @@ public class IntakeCommand extends CommandBase {
   private boolean done;
   private IntakeSubsystem subsystem;
 
-  private BooleanSupplier cancle;
+  private BooleanSupplier cancel;
 
   /** Creates a new Intake. */
-  public IntakeCommand(IntakeSubsystem subsystem, int type, BooleanSupplier cancle) {
+  public IntakeCommand(IntakeSubsystem subsystem, int type, BooleanSupplier cancel) {
     this.type = type;
     this.subsystem = subsystem;
-    this.cancle = cancle;
+    this.cancel = cancel;
 
   }
 
@@ -56,7 +56,7 @@ public class IntakeCommand extends CommandBase {
   }
 
   private boolean checkDone() {
-    if(cancle.getAsBoolean())
+    if(cancel.getAsBoolean())
     {
       return true;
     }
