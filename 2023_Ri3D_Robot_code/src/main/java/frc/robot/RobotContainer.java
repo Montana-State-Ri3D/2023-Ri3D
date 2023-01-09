@@ -32,7 +32,7 @@ public class RobotContainer {
 
   private DriveTrainSubsystem driveTrainSubsystem;
   private IntakeSubsystem intakeSubsystem;
-  private ArmSubsystem arm;
+  public ArmSubsystem arm;
   private Mode mode;
 
   private SequentialCommandGroup ejectItem;
@@ -61,7 +61,7 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-    initArm = new InitArm(arm);
+    InitArm initArm = new InitArm(arm);
 
     driveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),

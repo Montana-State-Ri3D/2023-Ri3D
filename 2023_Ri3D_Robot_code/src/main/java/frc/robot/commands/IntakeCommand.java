@@ -12,7 +12,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeCommand extends CommandBase {
 
   private int type;
-  private boolean done;
+  private boolean broken;
   private IntakeSubsystem subsystem;
 
   private BooleanSupplier cancel;
@@ -29,9 +29,9 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void initialize() {
     addRequirements(subsystem);
-    done = false;
+    broken = false;
     if(checkDone()) {
-      done = true;
+      broken = true;
     } else {
       subsystem.intakePower(0.80);
     }
@@ -40,7 +40,7 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    done = checkDone();
+    broken = checkDone();
   }
 
   // Called once the command ends or is interrupted.
@@ -52,7 +52,7 @@ public class IntakeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    return broken;
   }
 
   private boolean checkDone() {
