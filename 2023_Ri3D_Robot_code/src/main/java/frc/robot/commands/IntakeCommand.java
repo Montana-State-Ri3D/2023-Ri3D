@@ -29,12 +29,12 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void initialize() {
     addRequirements(subsystem);
-    if (checkDone()) {
+    done = false;
+    if(checkDone()) {
       done = true;
     } else {
-      subsystem.intakePower(0.5);
+      subsystem.intakePower(0.80);
     }
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

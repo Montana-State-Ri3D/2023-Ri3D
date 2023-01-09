@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Mode;
 
-public class Dup extends CommandBase {
+public class Ddown extends CommandBase {
   /** Creates a new Dup. */
   private Mode mode;
   private ArmSubsystem arm;
   private boolean done;
 
-  public Dup(Mode mode, ArmSubsystem arm) {
+  public Ddown(Mode mode, ArmSubsystem arm) {
     this.mode = mode;
     this.arm = arm;
     done = false;
@@ -24,9 +24,9 @@ public class Dup extends CommandBase {
   @Override
   public void initialize() {
     if (mode.getMode() == 1) {// If Cone
-      arm.setPos(4);
+      arm.setPos(2);
     } else if (mode.getMode() == 0) {// If Cube
-      arm.setPos(14);
+      arm.setPos(12);
     }
     done = true;
   }

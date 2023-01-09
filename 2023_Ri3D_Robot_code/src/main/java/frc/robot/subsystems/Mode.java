@@ -29,7 +29,7 @@ public class Mode extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    modeTelem.setDefaultDouble(mode);
+    modeTelem.setNumber(mode);
   }
   public int getMode() {
       return mode;

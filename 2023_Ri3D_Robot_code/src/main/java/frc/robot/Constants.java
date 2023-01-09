@@ -15,14 +15,15 @@ public final class Constants {
     public static final int RIGHT_BACK_MOTOR = 4;
 
     // Intake Motors
-    public static final int INTAKE_LEFT_MOTOR = 7;
-    public static final int INTAKE_RIGHT_MOTOR = 8;
+    public static final int INTAKE_LEFT_MOTOR = 8;
+    public static final int INTAKE_RIGHT_MOTOR = 7;
     // Intake DIO
     public static final int FRONT_BEAM_BRAKE = 0;
     public static final int BACK_BEAM_BRAKE = 1;
 
     //Arm Motors
     public static final int BASE_MOTOR1 = 10;
+    public static final int BASE_MOTOR2 = 11;
     public static final int WRIST_MOTOR = 12;
     // Arm DIO
     public static final int BASE_LIMIT = 2;

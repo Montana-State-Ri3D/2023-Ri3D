@@ -24,6 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private ShuffleboardTab tab;
   private NetworkTableEntry frontBeamTelem;
   private NetworkTableEntry backBeamTelem;
+  private NetworkTableEntry totalPowerDraw;
 
   public IntakeSubsystem(int leftMotorID, int rightMotorID, int frontBeamID, int backBeamID) {
     tab = Shuffleboard.getTab("Intake");
@@ -38,6 +39,11 @@ public class IntakeSubsystem extends SubsystemBase {
         .withSize(2, 1)
         .getEntry();
 
+    totalPowerDraw = tab.add("Total Power Draw", 0)
+        .withPosition(0, 1)
+        .withSize(2, 1)
+        .getEntry();
+
     frontBeam = new DigitalInput(frontBeamID);
     backBeam = new DigitalInput(backBeamID);
 
@@ -49,7 +55,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     rightMotor.follow(leftMotor,true);
 
-    int curentLimit = 10;
+    int curentLimit = 40;
     rightMotor.setSmartCurrentLimit(curentLimit);
     leftMotor.setSmartCurrentLimit(curentLimit);
 
@@ -59,6 +65,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     frontBeamTelem.forceSetBoolean(frontBeam.get());
     backBeamTelem.forceSetBoolean(backBeam.get());
+    totalPowerDraw.setNumber(leftMotor.getOutputCurrent());
   }
 
   public void intakePower(double power) {

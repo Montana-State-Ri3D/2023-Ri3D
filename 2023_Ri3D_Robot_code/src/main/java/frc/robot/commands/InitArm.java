@@ -13,10 +13,8 @@ public class InitArm extends CommandBase {
   private ArmSubsystem arm;
 
   public InitArm(ArmSubsystem arm) {
-    baseDone = false;
-    writsDone = true;
     this.arm = arm;
-
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -24,6 +22,8 @@ public class InitArm extends CommandBase {
   public void initialize() {
     arm.setWristPower(-0.1);
     arm.setBasePower(-0.1);
+    baseDone = false;
+    writsDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +40,7 @@ public class InitArm extends CommandBase {
       if (arm.getWristLimit()) {
         arm.setWristPower(0);
         arm.resetWristEncoder();
-        baseDone = true;
+        writsDone = true;
       }
     }
   }
