@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.Timer;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -14,6 +15,7 @@ public class IntakeCommand extends CommandBase {
   private int type;
   private boolean broken;
   private IntakeSubsystem subsystem;
+  private long startTime;
 
   private BooleanSupplier cancel;
 
@@ -23,12 +25,19 @@ public class IntakeCommand extends CommandBase {
     this.subsystem = subsystem;
     this.cancel = cancel;
 
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     addRequirements(subsystem);
+    if (type == 2){
+      subsystem.intakePower(-1);
+      startTime = System.currentTimeMillis();
+      return;
+    }
+
     broken = false;
     if(checkDone()) {
       broken = true;
@@ -67,6 +76,10 @@ public class IntakeCommand extends CommandBase {
       }
     } else if (type == 0) {// If Cube
       if (subsystem.getFrontBeam() == false) {
+        return true;
+      }
+    } else if (type == 2){
+      if(System.currentTimeMillis() - startTime >= 500){
         return true;
       }
     }

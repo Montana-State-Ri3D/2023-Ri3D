@@ -79,8 +79,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    InitArm initArm = new InitArm(m_robotContainer.arm);
-    initArm.schedule();
+    //InitArm initArm = new InitArm(m_robotContainer.arm);
+    //initArm.schedule();
   }
 
   /** This function is called periodically during operator control. */

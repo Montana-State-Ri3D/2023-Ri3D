@@ -22,6 +22,7 @@
       "/LiveWindow/Mode": "Subsystem",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
     }
@@ -29,6 +30,9 @@
   "NetworkTables": {
     "LiveWindow": {
       ".status": {
+        "open": true
+      },
+      "Mode": {
         "open": true
       },
       "open": true

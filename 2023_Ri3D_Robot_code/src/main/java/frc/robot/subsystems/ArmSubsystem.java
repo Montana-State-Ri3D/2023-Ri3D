@@ -14,13 +14,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  private boolean isIniting;
+  public boolean isIniting;
 
   private HashMap<Integer, Double> BasePos;
   private HashMap<Integer, Double> WristPos;
@@ -29,7 +31,8 @@ public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax armBase1;
   private CANSparkMax armBase2;
   private SparkMaxPIDController armBase1PID;
-  private RelativeEncoder armBase1Encoder;  
+  private RelativeEncoder armBase1Encoder;
+  private Solenoid helper;
 
   private CANSparkMax armWrist;
   private SparkMaxPIDController armWristPID;
@@ -39,9 +42,12 @@ public class ArmSubsystem extends SubsystemBase {
   private DigitalInput WristLimit;
 
   private ShuffleboardTab tab;
+  
   private NetworkTableEntry posTelem;
   private NetworkTableEntry wristLimitTelem;
   private NetworkTableEntry baseLimitTelem;
+  private NetworkTableEntry baseAngle;
+  private NetworkTableEntry wristAngle;
 
   /** Creates a new Arm. */
   public ArmSubsystem(int armBase1ID,int armBase2ID, int armWristID, int baseLimitID, int wristLimitID) {
@@ -64,6 +70,18 @@ public class ArmSubsystem extends SubsystemBase {
     .withSize(1, 1)
     .getEntry();
 
+    baseAngle = tab.add("Base Angle", 0)
+    .withPosition(4, 0)
+    .withSize(1, 1)
+    .getEntry();
+
+    wristAngle = tab.add("Wrist Angle", 0)
+    .withPosition(5, 0)
+    .withSize(1, 1)
+    .getEntry();
+
+
+
     BaseLimit = new DigitalInput(baseLimitID);
     WristLimit = new DigitalInput(wristLimitID);
 
@@ -75,6 +93,10 @@ public class ArmSubsystem extends SubsystemBase {
   private void initArmBase(int armBase1ID,int armBase2ID) {
     armBase1 = new CANSparkMax(armBase1ID, MotorType.kBrushless);
     armBase2 = new CANSparkMax(armBase2ID, MotorType.kBrushless);
+
+    helper = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+
+    helper.set(false);
 
     armBase2.restoreFactoryDefaults();
     armBase2.setIdleMode(IdleMode.kBrake);
@@ -116,31 +138,44 @@ public class ArmSubsystem extends SubsystemBase {
 
   private void makeMaps() {
     BasePos = new HashMap<>();
-    BasePos.put(1, 180.8);//Storage
+    BasePos.put(0, 0.0);
+
+    BasePos.put(1, 0.0);//Storage //Cones
     BasePos.put(2, 0.0);//Low Place
     BasePos.put(3, 0.0);//Mid Place
     BasePos.put(4, 0.0);//High Place
 
-    BasePos.put(11, 180.8);//Storage
+    BasePos.put(11, 0.0);//Storage //Cubes
     BasePos.put(12, 0.0);//Low Place
     BasePos.put(13, 0.0);//Mid Place
     BasePos.put(14, 0.0);//High Place
 
     WristPos = new HashMap<>();
-    WristPos.put(1, 0.0);
-    WristPos.put(2, 0.0);
-    WristPos.put(3, 0.0);
-    WristPos.put(4, 0.0);
+    WristPos.put(0, 0.0);
+
+    WristPos.put(1, 0.0);//Storage //Cones
+    WristPos.put(2, 0.0);//Low Place
+    WristPos.put(3, 0.0);//Mid Place
+    WristPos.put(4, 0.0);//High Place
+
+    WristPos.put(11, 0.0);//Storage //Cubes
+    WristPos.put(12, 0.0);//Low Place
+    WristPos.put(13, 0.0);//Mid Place
+    WristPos.put(14, 0.0);//High Place
   }
 
   @Override
   public void periodic() {
+    /*
     if (!isIniting) {
       armWristPID.setReference(WristPos.get(pos), CANSparkMax.ControlType.kPosition);
       armBase1PID.setReference(BasePos.get(pos), CANSparkMax.ControlType.kPosition);
     }
+    */
 
     posTelem.setNumber(pos);
+    baseAngle.setNumber(armBase1Encoder.getPosition());
+    wristAngle.setNumber(armWristEncoder.getPosition());
     baseLimitTelem.forceSetBoolean(!BaseLimit.get());
     wristLimitTelem.forceSetBoolean(!WristLimit.get());
   }
@@ -156,7 +191,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void setBasePower(double basePower) {
     armBase1.set(basePower);
   }
-
+/*
   public void resetWristEncoder() {
     armWristEncoder.setPosition(0);
   }
@@ -164,7 +199,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void resetBaseEncoder() {
     armBase1Encoder.setPosition(0);
   }
-
+*/
   public boolean getWristLimit() {
     return !WristLimit.get();
   }
@@ -172,4 +207,9 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean getBaseLimit() {
     return !BaseLimit.get();
   }
+
+  public void toggleHelper(){
+    helper.toggle();
+  }
+  
 }

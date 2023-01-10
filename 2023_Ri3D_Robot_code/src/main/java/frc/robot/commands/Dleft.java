@@ -6,63 +6,44 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.Mode;
 
-public class InitArm extends CommandBase {
-  private boolean baseDone;
-  private boolean writsDone;
+public class Dleft extends CommandBase {
+  /** Creates a new Dup. */
+  private Mode mode;
   private ArmSubsystem arm;
+  private boolean done;
 
-  public InitArm(ArmSubsystem arm) {
+  public Dleft(Mode mode, ArmSubsystem arm) {
+    this.mode = mode;
     this.arm = arm;
-    addRequirements(arm);
+    done = false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    /*
-    arm.isIniting = true;
-    arm.setWristPower(-0.1);
-    arm.setBasePower(-0.1);
-    baseDone = false;
-    writsDone = false;
-    */
+    if (mode.getMode() == 1) {// If Cone
+      arm.setPos(1);
+    } else if (mode.getMode() == 0) {// If Cube
+      arm.setPos(11);
+    }
+    done = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*
-    if (!baseDone) {
-      if (arm.getBaseLimit()) {
-        arm.setBasePower(0);
-        arm.resetBaseEncoder();
-        baseDone = true;
-      }
-    }
-    if (!writsDone) {
-      if (arm.getWristLimit()) {
-        arm.setWristPower(0);
-        arm.resetWristEncoder();
-        writsDone = true;
-      }
-    }
-    */
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.isIniting = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (baseDone && writsDone) {
-      return true;
-    } else {
-      return false;
-    }
+    return done;
   }
 }
