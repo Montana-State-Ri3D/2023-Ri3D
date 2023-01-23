@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 
 public class DriveTrainSubsystem extends SubsystemBase {
   /** Creates a new DriveTrainSubsystem. */
@@ -22,7 +22,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   private final ShuffleboardTab tab;
 
   // Declaring the PowerDraw NetworkTable Entry
-  private final NetworkTableEntry PowerDraw;
+  private final GenericEntry PowerDraw;
 
   // Declaring the motor controler Member variable
   private TalonSRX leftMotor_1;
@@ -74,7 +74,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    PowerDraw.setNumber(leftMotor_1.getStatorCurrent() + leftMotor_2.getStatorCurrent()
+    PowerDraw.setDouble(leftMotor_1.getStatorCurrent() + leftMotor_2.getStatorCurrent()
         + rightMotor_1.getStatorCurrent() + rightMotor_2.getStatorCurrent());
   }
 

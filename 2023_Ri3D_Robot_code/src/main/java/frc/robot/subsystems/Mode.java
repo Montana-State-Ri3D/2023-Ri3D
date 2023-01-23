@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Mode extends SubsystemBase {
 
   private ShuffleboardTab tab;
-  private NetworkTableEntry modeTelem;
+  private GenericEntry modeTelem;
 
   private int mode;
   /** Creates a new Mode. */
@@ -29,7 +29,7 @@ public class Mode extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    modeTelem.setNumber(mode);
+    modeTelem.setDouble(mode);
   }
   public int getMode() {
       return mode;

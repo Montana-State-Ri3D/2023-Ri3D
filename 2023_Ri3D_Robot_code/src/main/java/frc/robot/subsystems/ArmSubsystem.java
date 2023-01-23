@@ -12,7 +12,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -43,11 +43,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   private ShuffleboardTab tab;
   
-  private NetworkTableEntry posTelem;
-  private NetworkTableEntry wristLimitTelem;
-  private NetworkTableEntry baseLimitTelem;
-  private NetworkTableEntry baseAngle;
-  private NetworkTableEntry wristAngle;
+  private GenericEntry posTelem;
+  private GenericEntry wristLimitTelem;
+  private GenericEntry baseLimitTelem;
+  private GenericEntry baseAngle;
+  private GenericEntry wristAngle;
 
   /** Creates a new Arm. */
   public ArmSubsystem(int armBase1ID,int armBase2ID, int armWristID, int baseLimitID, int wristLimitID) {
@@ -173,11 +173,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
     */
 
-    posTelem.setNumber(pos);
-    baseAngle.setNumber(armBase1Encoder.getPosition());
-    wristAngle.setNumber(armWristEncoder.getPosition());
-    baseLimitTelem.forceSetBoolean(!BaseLimit.get());
-    wristLimitTelem.forceSetBoolean(!WristLimit.get());
+    posTelem.setDouble(pos);
+    baseAngle.setDouble(armBase1Encoder.getPosition());
+    wristAngle.setDouble(armWristEncoder.getPosition());
+    baseLimitTelem.setBoolean(!BaseLimit.get());
+    wristLimitTelem.setBoolean(!WristLimit.get());
   }
 
   public void setPos(int pos) {

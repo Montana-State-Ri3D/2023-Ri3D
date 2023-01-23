@@ -8,7 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,9 +22,9 @@ public class IntakeSubsystem extends SubsystemBase {
   private DigitalInput backBeam;
 
   private ShuffleboardTab tab;
-  private NetworkTableEntry frontBeamTelem;
-  private NetworkTableEntry backBeamTelem;
-  private NetworkTableEntry totalPowerDraw;
+  private GenericEntry frontBeamTelem;
+  private GenericEntry backBeamTelem;
+  private GenericEntry totalPowerDraw;
 
   public IntakeSubsystem(int leftMotorID, int rightMotorID, int frontBeamID, int backBeamID) {
     tab = Shuffleboard.getTab("Intake");
@@ -63,9 +63,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    frontBeamTelem.forceSetBoolean(frontBeam.get());
-    backBeamTelem.forceSetBoolean(backBeam.get());
-    totalPowerDraw.setNumber(leftMotor.getOutputCurrent());
+    frontBeamTelem.setBoolean(frontBeam.get());
+    backBeamTelem.setBoolean(backBeam.get());
+    totalPowerDraw.setDouble(leftMotor.getOutputCurrent());
   }
 
   public void intakePower(double power) {

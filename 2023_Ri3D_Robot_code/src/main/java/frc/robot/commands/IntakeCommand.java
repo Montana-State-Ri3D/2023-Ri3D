@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.Timer;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
