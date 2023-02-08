@@ -112,19 +112,19 @@ public class RobotContainer {
     //new POVButton(driveController, 270).whenPressed(new Dleft(mode, arm));
 
     // Toggle Brake Mode with A
-    new JoystickButton(driveController, Button.kA.value).whenPressed(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
+    new JoystickButton(driveController, Button.kA.value).onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
 
     // Eject Item with X
-    new JoystickButton(driveController, Button.kX.value).whenPressed(new IntakeCommand(intakeSubsystem, 2, () -> driveController.getYButton()));
+    new JoystickButton(driveController, Button.kX.value).onTrue(new IntakeCommand(intakeSubsystem, 2, () -> driveController.getYButton()));
 
-    new JoystickButton(driveController, Button.kB.value).whenPressed(new InstantCommand(() -> arm.toggleHelper(), arm));
+    new JoystickButton(driveController, Button.kB.value).onTrue(new InstantCommand(() -> arm.toggleHelper(), arm));
 
     // Intake Cone
-    new JoystickButton(driveController, Button.kRightBumper.value).whenPressed(intakeCone);
+    new JoystickButton(driveController, Button.kRightBumper.value).onTrue(intakeCone);
   // Intake Cube
-    new JoystickButton(driveController, Button.kLeftBumper.value).whenPressed(intakeCube);
+    new JoystickButton(driveController, Button.kLeftBumper.value).onTrue(intakeCube);
 
-    //new JoystickButton(driveController, Button.kStart.value).whenPressed(initArm);
+    //new JoystickButton(driveController, Button.kStart.value).onTrue(initArm);
 
   }
 
