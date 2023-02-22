@@ -80,8 +80,6 @@ public class ArmSubsystem extends SubsystemBase {
     .withSize(1, 1)
     .getEntry();
 
-
-
     BaseLimit = new DigitalInput(baseLimitID);
     WristLimit = new DigitalInput(wristLimitID);
 
@@ -109,7 +107,7 @@ public class ArmSubsystem extends SubsystemBase {
     armBase1PID = armBase1.getPIDController();
     armBase1Encoder = armBase1.getEncoder();
 
-    armBase1Encoder.setPositionConversionFactor(0.69);
+    armBase1Encoder.setPositionConversionFactor(126);
 
     armBase1PID.setP(0.000001);
     armBase1PID.setI(0.000001);
@@ -173,11 +171,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
     */
 
-    posTelem.setDouble(pos);
+    posTelem.setInteger(pos);
     baseAngle.setDouble(armBase1Encoder.getPosition());
     wristAngle.setDouble(armWristEncoder.getPosition());
-    baseLimitTelem.setBoolean(!BaseLimit.get());
-    wristLimitTelem.setBoolean(!WristLimit.get());
+    baseLimitTelem.setBoolean(BaseLimit.get());
+    wristLimitTelem.setBoolean(WristLimit.get());
   }
 
   public void setPos(int pos) {

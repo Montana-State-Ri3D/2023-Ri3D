@@ -53,78 +53,82 @@ public class RobotContainer {
     configureButtonBindings(); // Configure the button bindings
   }
 
-  private void createSubsystems() { 
+  private void createSubsystems() {
     mode = new Mode();
 
-    driveTrainSubsystem = new DriveTrainSubsystem(LEFT_FRONT_MOTOR,LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR);
-    intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR,FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
+    driveTrainSubsystem = new DriveTrainSubsystem(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR,
+        RIGHT_BACK_MOTOR);
+    intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR, FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
 
     arm = new ArmSubsystem(BASE_MOTOR1, BASE_MOTOR2, WRIST_MOTOR, BASE_LIMIT, WRIST_LIMIT);
   }
 
-
-
   private void createCommands() {
 
-    armManual = new ArmManual(arm,() -> driveController.getRightY(),() -> operatorController.getRightY());
+    armManual = new ArmManual(arm, () -> operatorController.getLeftY(), () -> operatorController.getRightY());
     arm.setDefaultCommand(armManual);
 
-    //initArm = new InitArm(arm);
+    // initArm = new InitArm(arm);
 
-    driveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> driveController.getLeftX());
+    driveCommand = new DriveCommand(driveTrainSubsystem,
+        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
+        () -> driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
-    
+
     ejectItem = new SequentialCommandGroup();
     ejectItem.addCommands(new InstantCommand(() -> intakeSubsystem.intakePower(-1)));
     ejectItem.addCommands(new WaitCommand(0.5));
     ejectItem.addCommands(new InstantCommand(() -> intakeSubsystem.intakePower(0)));
 
     intakeCone = new SequentialCommandGroup();
-    //intakeCone.addCommands(new InstantCommand(() -> mode.setMode(1)));
-    //intakeCone.addCommands(new InstantCommand(() -> arm.setPos(2)));
+    // intakeCone.addCommands(new InstantCommand(() -> mode.setMode(1)));
+    // intakeCone.addCommands(new InstantCommand(() -> arm.setPos(2)));
     intakeCone.addCommands(new IntakeCommand(intakeSubsystem, 1, () -> driveController.getYButton()));
-    //intakeCone.addCommands(new InstantCommand(() -> arm.setPos(1)));
+    // intakeCone.addCommands(new InstantCommand(() -> arm.setPos(1)));
 
     intakeCube = new SequentialCommandGroup();
-    //Sets the Mode to 0 for Cubes
-    //intakeCube.addCommands(new InstantCommand(() -> mode.setMode(0)));
-    //Sets The pos of the arm to intake
-    //intakeCube.addCommands(new InstantCommand(() -> arm.setPos(12)));
-    //scheduals an intake command
+    // Sets the Mode to 0 for Cubes
+    // intakeCube.addCommands(new InstantCommand(() -> mode.setMode(0)));
+    // Sets The pos of the arm to intake
+    // intakeCube.addCommands(new InstantCommand(() -> arm.setPos(12)));
+    // scheduals an intake command
     intakeCube.addCommands(new IntakeCommand(intakeSubsystem, 0, () -> driveController.getYButton()));
-    //Sets the arm to storage
-    //intakeCube.addCommands(new InstantCommand(() -> arm.setPos(1)));
-    
+    // Sets the arm to storage
+    // intakeCube.addCommands(new InstantCommand(() -> arm.setPos(1)));
+
   }
 
   private void configureButtonBindings() {
 
     // Calls Dup to move Arm to high position
-    //new POVButton(driveController, 0).whenPressed(new Dup(mode, arm));
+    // new POVButton(driveController, 0).whenPressed(new Dup(mode, arm));
 
     // Calls Ddown to move Arm to mid position
-    //new POVButton(driveController, 90).whenPressed(new Dright(mode, arm));
+    // new POVButton(driveController, 90).whenPressed(new Dright(mode, arm));
 
     // Calls Ddown to move Arm to low position
-    //new POVButton(driveController, 180).whenPressed(new Ddown(mode, arm));
+    // new POVButton(driveController, 180).whenPressed(new Ddown(mode, arm));
 
     // Calls Ddown to move Arm to storage position
-    //new POVButton(driveController, 270).whenPressed(new Dleft(mode, arm));
+    // new POVButton(driveController, 270).whenPressed(new Dleft(mode, arm));
 
     // Toggle Brake Mode with A
-    new JoystickButton(driveController, Button.kA.value).onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
+    new JoystickButton(driveController, Button.kA.value)
+        .onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
 
     // Eject Item with X
-    new JoystickButton(driveController, Button.kX.value).onTrue(new IntakeCommand(intakeSubsystem, 2, () -> driveController.getYButton()));
+    new JoystickButton(driveController, Button.kX.value)
+        .onTrue(new IntakeCommand(intakeSubsystem, 2, () -> driveController.getYButton()));
 
+    // Toggle Arm Helper Cylinder
     new JoystickButton(driveController, Button.kB.value).onTrue(new InstantCommand(() -> arm.toggleHelper(), arm));
 
     // Intake Cone
     new JoystickButton(driveController, Button.kRightBumper.value).onTrue(intakeCone);
-  // Intake Cube
+    // Intake Cube
     new JoystickButton(driveController, Button.kLeftBumper.value).onTrue(intakeCube);
 
-    //new JoystickButton(driveController, Button.kStart.value).onTrue(initArm);
+    // new JoystickButton(driveController, Button.kStart.value).onTrue(initArm);
 
   }
 

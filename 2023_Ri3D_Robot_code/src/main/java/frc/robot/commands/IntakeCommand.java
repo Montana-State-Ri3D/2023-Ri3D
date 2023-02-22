@@ -23,8 +23,6 @@ public class IntakeCommand extends CommandBase {
     this.type = type;
     this.subsystem = subsystem;
     this.cancel = cancel;
-
-
   }
 
   // Called when the command is initially scheduled.
@@ -70,11 +68,11 @@ public class IntakeCommand extends CommandBase {
     }
     
     if (type == 1) {// If Cone
-      if (subsystem.getBackBeam() == false) {
+      if (subsystem.getConeBeam() == false) {
         return true;
       }
     } else if (type == 0) {// If Cube
-      if (subsystem.getFrontBeam() == false) {
+      if (subsystem.getCubeBeam() == false) {
         return true;
       }
     } else if (type == 2){
