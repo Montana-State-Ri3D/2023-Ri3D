@@ -12,10 +12,8 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Mode;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.subsystems.Mode.Type;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -27,15 +25,16 @@ public class RobotContainer {
 
   // Creating Controlers
   @SuppressWarnings({ "unused" })
-  private final XboxController driveController = new XboxController(Constants.DRIVE_CONTROLLER_PORT);
+  private final CommandXboxController driveController = new CommandXboxController(Constants.DRIVE_CONTROLLER_PORT);
   @SuppressWarnings({ "unused" })
-  private final XboxController operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  private final CommandXboxController operatorController = new CommandXboxController(
+      Constants.OPERATOR_CONTROLLER_PORT);
   @SuppressWarnings({ "unused" })
-  private final XboxController testController = new XboxController(Constants.TEST_CONTROLLER_PORT);
+  private final CommandXboxController testController = new CommandXboxController(Constants.TEST_CONTROLLER_PORT);
 
   private DriveTrainSubsystem driveTrainSubsystem;
   private IntakeSubsystem intakeSubsystem;
-  public ArmSubsystem arm;
+  public ArmSubsystem armSubsystem;
   private Mode mode;
 
   private SequentialCommandGroup ejectItem;
@@ -53,78 +52,79 @@ public class RobotContainer {
     configureButtonBindings(); // Configure the button bindings
   }
 
-  private void createSubsystems() { 
+  private void createSubsystems() {
     mode = new Mode();
 
-    driveTrainSubsystem = new DriveTrainSubsystem(LEFT_FRONT_MOTOR,LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR, RIGHT_BACK_MOTOR);
-    intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR,FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
+    driveTrainSubsystem = new DriveTrainSubsystem(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR,
+        RIGHT_BACK_MOTOR);
+    intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR, FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
 
-    arm = new ArmSubsystem(BASE_MOTOR1, BASE_MOTOR2, WRIST_MOTOR, BASE_LIMIT, WRIST_LIMIT);
+    armSubsystem = new ArmSubsystem(BASE_MOTOR1, BASE_MOTOR2, WRIST_MOTOR, BASE_LIMIT, WRIST_LIMIT);
   }
-
-
 
   private void createCommands() {
 
-    armManual = new ArmManual(arm,() -> driveController.getRightY(),() -> operatorController.getRightY());
-    arm.setDefaultCommand(armManual);
+    armManual = new ArmManual(armSubsystem, () -> operatorController.getLeftY(), () -> operatorController.getRightY());
+    armSubsystem.setDefaultCommand(armManual);
 
-    //initArm = new InitArm(arm);
+    initArm = new InitArm(armSubsystem);
 
-    driveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> driveController.getLeftX());
+    driveCommand = new DriveCommand(driveTrainSubsystem,
+        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
+        () -> driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
-    
-    ejectItem = new SequentialCommandGroup();
-    ejectItem.addCommands(new InstantCommand(() -> intakeSubsystem.intakePower(-1)));
-    ejectItem.addCommands(new WaitCommand(0.5));
-    ejectItem.addCommands(new InstantCommand(() -> intakeSubsystem.intakePower(0)));
 
     intakeCone = new SequentialCommandGroup();
-    //intakeCone.addCommands(new InstantCommand(() -> mode.setMode(1)));
-    //intakeCone.addCommands(new InstantCommand(() -> arm.setPos(2)));
-    intakeCone.addCommands(new IntakeCommand(intakeSubsystem, 1, () -> driveController.getYButton()));
-    //intakeCone.addCommands(new InstantCommand(() -> arm.setPos(1)));
+    // Sets the mode to Cone
+    intakeCone.addCommands(new InstantCommand(() -> mode.setMode(Type.CONE)));
+    // intakeCone.addCommands(new InstantCommand(() -> arm.setPos(2)));
+    intakeCone.addCommands(new IntakeCommand(intakeSubsystem, Type.CONE, () -> driveController.y().getAsBoolean()));
+    // intakeCone.addCommands(new InstantCommand(() -> arm.setPos(1)));
 
     intakeCube = new SequentialCommandGroup();
-    //Sets the Mode to 0 for Cubes
-    //intakeCube.addCommands(new InstantCommand(() -> mode.setMode(0)));
-    //Sets The pos of the arm to intake
-    //intakeCube.addCommands(new InstantCommand(() -> arm.setPos(12)));
-    //scheduals an intake command
-    intakeCube.addCommands(new IntakeCommand(intakeSubsystem, 0, () -> driveController.getYButton()));
-    //Sets the arm to storage
-    //intakeCube.addCommands(new InstantCommand(() -> arm.setPos(1)));
-    
+    // Sets the Mode to Cubes
+    intakeCube.addCommands(new InstantCommand(() -> mode.setMode(Type.CUBE)));
+    // Sets The pos of the arm to intake
+    // intakeCube.addCommands(new InstantCommand(() -> arm.setPos(12)));
+    // scheduals an intake command
+    intakeCube.addCommands(new IntakeCommand(intakeSubsystem, Type.CUBE, () -> driveController.y().getAsBoolean()));
+    // Sets the arm to storage
+    // intakeCube.addCommands(new InstantCommand(() -> arm.setPos(11)));
+
   }
 
   private void configureButtonBindings() {
 
     // Calls Dup to move Arm to high position
-    //new POVButton(driveController, 0).whenPressed(new Dup(mode, arm));
+    driveController.povUp().onTrue(new Dup(mode, armSubsystem));
 
-    // Calls Ddown to move Arm to mid position
-    //new POVButton(driveController, 90).whenPressed(new Dright(mode, arm));
+    // Calls Dright to move Arm to mid position
+    driveController.povRight().onTrue(new Dright(mode, armSubsystem));
 
     // Calls Ddown to move Arm to low position
-    //new POVButton(driveController, 180).whenPressed(new Ddown(mode, arm));
+    driveController.povDown().onTrue(new Ddown(mode, armSubsystem));
 
-    // Calls Ddown to move Arm to storage position
-    //new POVButton(driveController, 270).whenPressed(new Dleft(mode, arm));
+    // Calls Dleft to move Arm to storage position
+    driveController.povLeft().onTrue(new Dleft(mode, armSubsystem));
 
     // Toggle Brake Mode with A
-    new JoystickButton(driveController, Button.kA.value).onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
+    driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
 
     // Eject Item with X
-    new JoystickButton(driveController, Button.kX.value).onTrue(new IntakeCommand(intakeSubsystem, 2, () -> driveController.getYButton()));
+    driveController.x().onTrue(new IntakeCommand(intakeSubsystem, Type.EJECT, () -> driveController.y().getAsBoolean()));
 
-    new JoystickButton(driveController, Button.kB.value).onTrue(new InstantCommand(() -> arm.toggleHelper(), arm));
+    // Intake Cone with Right Bumper
+    driveController.rightBumper().onTrue(intakeCone);
+    // Intake Cube wiht Left Bumper
+    driveController.leftBumper().onTrue(intakeCube);
+    // Init Arm
+    driveController.start().onTrue(initArm);
 
-    // Intake Cone
-    new JoystickButton(driveController, Button.kRightBumper.value).onTrue(intakeCone);
-  // Intake Cube
-    new JoystickButton(driveController, Button.kLeftBumper.value).onTrue(intakeCube);
+    // reset base encoder
+    operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetBaseEncoder(), armSubsystem));
 
-    //new JoystickButton(driveController, Button.kStart.value).onTrue(initArm);
+    // reset writs encoder
+    operatorController.back().onTrue(new InstantCommand(() -> armSubsystem.resetWristEncoder(), armSubsystem));
 
   }
 

@@ -18,23 +18,23 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private CANSparkMax rightMotor;
   private CANSparkMax leftMotor;
-  private DigitalInput frontBeam;
-  private DigitalInput backBeam;
+  private DigitalInput cubeBeam;
+  private DigitalInput coneBeam;
 
   private ShuffleboardTab tab;
-  private GenericEntry frontBeamTelem;
-  private GenericEntry backBeamTelem;
+  private GenericEntry cubeBeamTelem;
+  private GenericEntry coneBeamTelem;
   private GenericEntry totalPowerDraw;
 
   public IntakeSubsystem(int leftMotorID, int rightMotorID, int frontBeamID, int backBeamID) {
     tab = Shuffleboard.getTab("Intake");
 
-    frontBeamTelem = tab.add("Front Beam Brake Sensor", 0)
+    cubeBeamTelem = tab.add("Cube Beam Brake Sensor", 0)
         .withPosition(0, 0)
         .withSize(2, 1)
         .getEntry();
 
-    backBeamTelem = tab.add("Back Beam Brake Sensor", 0)
+    coneBeamTelem = tab.add("Cone Beam Brake Sensor", 0)
         .withPosition(2, 0)
         .withSize(2, 1)
         .getEntry();
@@ -44,8 +44,8 @@ public class IntakeSubsystem extends SubsystemBase {
         .withSize(2, 1)
         .getEntry();
 
-    frontBeam = new DigitalInput(frontBeamID);
-    backBeam = new DigitalInput(backBeamID);
+    cubeBeam = new DigitalInput(frontBeamID);
+    coneBeam = new DigitalInput(backBeamID);
 
     rightMotor = new CANSparkMax(rightMotorID, MotorType.kBrushless);
     leftMotor = new CANSparkMax(leftMotorID, MotorType.kBrushless);
@@ -63,20 +63,20 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    frontBeamTelem.setBoolean(frontBeam.get());
-    backBeamTelem.setBoolean(backBeam.get());
-    totalPowerDraw.setDouble(leftMotor.getOutputCurrent());
+    cubeBeamTelem.setBoolean(cubeBeam.get());
+    coneBeamTelem.setBoolean(coneBeam.get());
+    totalPowerDraw.setDouble(leftMotor.getOutputCurrent()+rightMotor.getOutputCurrent());
   }
 
   public void intakePower(double power) {
     leftMotor.set(power);
   }
 
-  public boolean getFrontBeam() {
-    return frontBeam.get();
+  public boolean getCubeBeam() {
+    return cubeBeam.get();
   }
 
-  public boolean getBackBeam() {
-    return backBeam.get();
+  public boolean getConeBeam() {
+    return coneBeam.get();
   }
 }
