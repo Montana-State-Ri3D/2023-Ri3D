@@ -23,9 +23,9 @@ public class Dright extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (mode.getMode() == 1) {// If Cone
+    if (mode.getMode() == Mode.Type.CONE) {// If Cone
       arm.setPos(3);
-    } else if (mode.getMode() == 0) {// If Cube
+    } else if (mode.getMode() == Mode.Type.CUBE) {// If Cube
       arm.setPos(13);
     }
     done = true;

@@ -32,7 +32,6 @@ public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax armBase2;
   private SparkMaxPIDController armBase1PID;
   private RelativeEncoder armBase1Encoder;
-  private Solenoid helper;
 
   private CANSparkMax armWrist;
   private SparkMaxPIDController armWristPID;
@@ -92,22 +91,23 @@ public class ArmSubsystem extends SubsystemBase {
     armBase1 = new CANSparkMax(armBase1ID, MotorType.kBrushless);
     armBase2 = new CANSparkMax(armBase2ID, MotorType.kBrushless);
 
-    helper = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-
-    helper.set(false);
-
-    armBase2.restoreFactoryDefaults();
-    armBase2.setIdleMode(IdleMode.kBrake);
-
-    armBase2.follow(armBase1,true);
+    armBase2.setSmartCurrentLimit(45);
+    armBase1.setSmartCurrentLimit(45);
 
     armBase1.restoreFactoryDefaults();
+    armBase2.restoreFactoryDefaults();
+
+    armBase2.setIdleMode(IdleMode.kBrake);
     armBase1.setIdleMode(IdleMode.kBrake);
+
+    armBase2.follow(armBase1,true);
+    
+    armBase1.setInverted(true);
     
     armBase1PID = armBase1.getPIDController();
     armBase1Encoder = armBase1.getEncoder();
 
-    armBase1Encoder.setPositionConversionFactor(126);
+    armBase1Encoder.setPositionConversionFactor(1.0/126.0);
 
     armBase1PID.setP(0.000001);
     armBase1PID.setI(0.000001);
@@ -142,7 +142,7 @@ public class ArmSubsystem extends SubsystemBase {
     BasePos.put(2, 0.0);//Low Place
     BasePos.put(3, 0.0);//Mid Place
     BasePos.put(4, 0.0);//High Place
-
+    
     BasePos.put(11, 0.0);//Storage //Cubes
     BasePos.put(12, 0.0);//Low Place
     BasePos.put(13, 0.0);//Mid Place
@@ -189,7 +189,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void setBasePower(double basePower) {
     armBase1.set(basePower);
   }
-/*
+
   public void resetWristEncoder() {
     armWristEncoder.setPosition(0);
   }
@@ -197,17 +197,12 @@ public class ArmSubsystem extends SubsystemBase {
   public void resetBaseEncoder() {
     armBase1Encoder.setPosition(0);
   }
-*/
+
   public boolean getWristLimit() {
     return !WristLimit.get();
   }
 
   public boolean getBaseLimit() {
     return !BaseLimit.get();
-  }
-
-  public void toggleHelper(){
-    helper.toggle();
-  }
-  
+  }  
 }

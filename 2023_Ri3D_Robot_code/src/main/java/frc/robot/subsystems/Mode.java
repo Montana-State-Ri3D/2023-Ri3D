@@ -14,27 +14,36 @@ public class Mode extends SubsystemBase {
   private ShuffleboardTab tab;
   private GenericEntry modeTelem;
 
-  private int mode;
+  private Type mode;
+
+  public enum Type {
+    CONE,
+    CUBE,
+    EJECT
+  }
+
   /** Creates a new Mode. */
   public Mode() {
     tab = Shuffleboard.getTab("Arm");
-    mode = 1;
+    mode = Type.CONE;
 
-    modeTelem = tab.add("Mode", 1)
-    .withPosition(1, 0)
-    .withSize(1, 1)
-    .getEntry();
+    modeTelem = tab.add("Mode", "CONE")
+        .withPosition(1, 0)
+        .withSize(1, 1)
+        .getEntry();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    modeTelem.setDouble(mode);
+    modeTelem.setString(mode.toString());
   }
-  public int getMode() {
-      return mode;
+
+  public Type getMode() {
+    return mode;
   }
-  public void setMode(int mode){
+
+  public void setMode(Type mode) {
     this.mode = mode;
   }
 }

@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Mode;
 
 public class IntakeCommand extends CommandBase {
 
-  private int type;
+  private Mode.Type type;
   private boolean broken;
   private IntakeSubsystem subsystem;
   private long startTime;
@@ -19,7 +19,7 @@ public class IntakeCommand extends CommandBase {
   private BooleanSupplier cancel;
 
   /** Creates a new Intake. */
-  public IntakeCommand(IntakeSubsystem subsystem, int type, BooleanSupplier cancel) {
+  public IntakeCommand(IntakeSubsystem subsystem, Mode.Type type, BooleanSupplier cancel) {
     this.type = type;
     this.subsystem = subsystem;
     this.cancel = cancel;
@@ -29,7 +29,7 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void initialize() {
     addRequirements(subsystem);
-    if (type == 2){
+    if (type == Mode.Type.EJECT){
       subsystem.intakePower(-1);
       startTime = System.currentTimeMillis();
       return;
@@ -67,15 +67,15 @@ public class IntakeCommand extends CommandBase {
       return true;
     }
     
-    if (type == 1) {// If Cone
+    if (type == Mode.Type.CONE) {// If Cone
       if (subsystem.getConeBeam() == false) {
         return true;
       }
-    } else if (type == 0) {// If Cube
+    } else if (type == Mode.Type.CUBE) {// If Cube
       if (subsystem.getCubeBeam() == false) {
         return true;
       }
-    } else if (type == 2){
+    } else if (type == Mode.Type.EJECT){
       if(System.currentTimeMillis() - startTime >= 500){
         return true;
       }
