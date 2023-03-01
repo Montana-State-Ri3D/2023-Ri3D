@@ -8,11 +8,11 @@ import frc.robot.commands.Dup;
 import frc.robot.commands.InitArm;
 import frc.robot.commands.Ddown;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Mode;
 import frc.robot.subsystems.Mode.Type;
+import frc.robot.subsystems.arm.RealArm;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,7 +33,7 @@ public class RobotContainer {
 
   private DriveTrainSubsystem driveTrainSubsystem;
   private IntakeSubsystem intakeSubsystem;
-  public ArmSubsystem armSubsystem;
+  public RealArm armSubsystem;
   private Mode mode;
 
   private SequentialCommandGroup intakeCone;
@@ -56,13 +56,13 @@ public class RobotContainer {
         RIGHT_BACK_MOTOR);
     intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR, FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
 
-    armSubsystem = new ArmSubsystem(BASE_MOTOR1, BASE_MOTOR2, WRIST_MOTOR, BASE_LIMIT, WRIST_LIMIT);
+    armSubsystem = new RealArm(BASE_MOTOR1, BASE_MOTOR2, WRIST_MOTOR, BASE_LIMIT, WRIST_LIMIT);
   }
 
   private void createCommands() {
 
-    armManual = new ArmManual(armSubsystem, () -> operatorController.getLeftY(), () -> operatorController.getRightY());
-    armSubsystem.setDefaultCommand(armManual);
+    armManual = new ArmManual(armSubsystem, () -> -operatorController.getLeftY(), () -> operatorController.getRightY());
+    //armSubsystem.setDefaultCommand(armManual);
 
     initArm = new InitArm(armSubsystem);
 
@@ -104,22 +104,30 @@ public class RobotContainer {
     // Calls Dleft to move Arm to storage position
     driveController.povLeft().onTrue(new Dleft(mode, armSubsystem));
 
+    //Update PID Arm values
+    driveController.b().onTrue(new InstantCommand(() -> armSubsystem.updatePID(),armSubsystem));
+
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
-
+    System.out.println("Hello");
     // Eject Item with X
     driveController.x().onTrue(new IntakeCommand(intakeSubsystem, Type.EJECT, () -> driveController.y().getAsBoolean()));
+    
+    // Update PID values
+
 
     // Intake Cone with Right Bumper
     driveController.rightBumper().onTrue(intakeCone);
+    
     // Intake Cube wiht Left Bumper
     driveController.leftBumper().onTrue(intakeCube);
+    
     // Init Arm
     driveController.start().onTrue(initArm);
-
+    
     // reset base encoder
     operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetBaseEncoder(), armSubsystem));
-
+    
     // reset writs encoder
     operatorController.back().onTrue(new InstantCommand(() -> armSubsystem.resetWristEncoder(), armSubsystem));
 

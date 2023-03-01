@@ -29,12 +29,12 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem(int leftMotorID, int rightMotorID, int frontBeamID, int backBeamID) {
     tab = Shuffleboard.getTab("Intake");
 
-    cubeBeamTelem = tab.add("Cube Beam Brake Sensor", 0)
+    cubeBeamTelem = tab.add("Cube Beam Brake Sensor",false )
         .withPosition(0, 0)
         .withSize(2, 1)
         .getEntry();
 
-    coneBeamTelem = tab.add("Cone Beam Brake Sensor", 0)
+    coneBeamTelem = tab.add("Cone Beam Brake Sensor",false)
         .withPosition(2, 0)
         .withSize(2, 1)
         .getEntry();

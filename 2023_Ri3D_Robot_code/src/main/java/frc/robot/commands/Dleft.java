@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Mode;
+import frc.robot.subsystems.arm.RealArm;
 
 public class Dleft extends CommandBase {
   /** Creates a new Dup. */
   private Mode mode;
-  private ArmSubsystem arm;
+  private RealArm arm;
   private boolean done;
 
-  public Dleft(Mode mode, ArmSubsystem arm) {
+  public Dleft(Mode mode, RealArm arm) {
     this.mode = mode;
     this.arm = arm;
     done = false;

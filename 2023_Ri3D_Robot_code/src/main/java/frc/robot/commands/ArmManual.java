@@ -7,15 +7,15 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.arm.RealArm;
 
 public class ArmManual extends CommandBase {
   /** Creates a new ArmManual. */
-  private ArmSubsystem arm;
+  private RealArm arm;
   private DoubleSupplier basePower;
   private DoubleSupplier wristPower;
 
-  public ArmManual(ArmSubsystem arm, DoubleSupplier basePower,DoubleSupplier wristPower){ 
+  public ArmManual(RealArm arm, DoubleSupplier basePower,DoubleSupplier wristPower){ 
     this.arm = arm;
     this.basePower = basePower;
     this.wristPower = wristPower;

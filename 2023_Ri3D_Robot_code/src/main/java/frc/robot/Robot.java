@@ -28,6 +28,8 @@ public class Robot extends LoggedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private PowerDistribution pdh;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -43,7 +45,7 @@ public class Robot extends LoggedRobot {
 if (isReal()) {
     Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
     Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    new PowerDistribution(1, ModuleType.kCTRE); // Enables power distribution logging
+    pdh = new PowerDistribution(1, ModuleType.kCTRE); // Enables power distribution logging
 } else {
     setUseTiming(false); // Run as fast as possible
     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
@@ -73,7 +75,9 @@ Logger.getInstance().start(); // Start logging! No more data receivers, replay s
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    pdh.close();
+  }
 
   @Override
   public void disabledPeriodic() {}

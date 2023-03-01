@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.arm.RealArm;
 
 public class InitArm extends CommandBase {
   private boolean baseDone;
   private boolean writsDone;
-  private ArmSubsystem arm;
+  private RealArm arm;
 
-  public InitArm(ArmSubsystem arm) {
+  public InitArm(RealArm arm) {
     this.arm = arm;
     addRequirements(arm);
   }
