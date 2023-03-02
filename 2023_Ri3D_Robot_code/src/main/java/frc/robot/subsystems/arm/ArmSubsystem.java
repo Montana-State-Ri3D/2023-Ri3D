@@ -66,7 +66,7 @@ public class ArmSubsystem extends SubsystemBase {
     shoulderPos.put(11, 0.0);// Storage //Cubes
     shoulderPos.put(12, 0.0);// Low Place
     shoulderPos.put(13, 0.0);// Mid Place
-    shoulderPos.put(14, 60.0);// High Place
+    shoulderPos.put(14, 0.0);// High Place
 
     wristPos = new HashMap<>();
     wristPos.put(0, 0.0);
@@ -74,7 +74,7 @@ public class ArmSubsystem extends SubsystemBase {
     wristPos.put(1, 0.0);// Storage //Cones
     wristPos.put(2, 0.0);// Low Place
     wristPos.put(3, 0.0);// Mid Place
-    wristPos.put(4, 0.0);// High Place
+    wristPos.put(4, 60.0);// High Place
 
     wristPos.put(11, 0.0);// Storage //Cubes
     wristPos.put(12, 0.0);// Low Place
@@ -85,19 +85,23 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.getInstance().processInputs("Arm/Inputs", inputs);
 
-    Logger.getInstance().recordOutput("Arm/Pose", pose);
+    Logger logger = Logger.getInstance();
+
+    logger.processInputs("Arm/Inputs", inputs);
+
+    logger.recordOutput("Arm/Pose", pose);
 
     double shoulderPower = MathUtil.clamp(shoulderPID.calculate(inputs.shoulderAngleDeg, shoulderPos.get(pose)), -0.25,
         0.25) + ksFF;
-    double wristPower = MathUtil.clamp(wristPID.calculate(inputs.wristAngleDeg, wristPos.get(pose)), -0.25, 0.25) + kwFF;
+    double wristPower = MathUtil.clamp(wristPID.calculate(inputs.wristAngleDeg, wristPos.get(pose)), -0.25, 0.25)
+        + kwFF;
 
-    Logger.getInstance().recordOutput("Arm/ShoulderPower", shoulderPower);
-    Logger.getInstance().recordOutput("Arm/WristPower", wristPower);
+    logger.recordOutput("Arm/ShoulderPower", shoulderPower);
+    logger.recordOutput("Arm/WristPower", wristPower);
 
-    Logger.getInstance().recordOutput("Arm/ShoulderGoalAngle", shoulderPos.get(pose));
-    Logger.getInstance().recordOutput("Arm/WristGoalAngle", wristPos.get(pose));
+    logger.recordOutput("Arm/ShoulderGoalAngle", shoulderPos.get(pose));
+    logger.recordOutput("Arm/WristGoalAngle", wristPos.get(pose));
 
     io.setShoulderPower(shoulderPower);
     io.setWristPower(wristPower);

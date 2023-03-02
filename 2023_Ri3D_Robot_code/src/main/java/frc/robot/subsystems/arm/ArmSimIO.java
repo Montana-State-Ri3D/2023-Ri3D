@@ -13,20 +13,23 @@ public class ArmSimIO implements ArmIO {
   private static final double ARM_CG_MOMENT_OF_INERTIA = 0.5;
   private static final double ARM_LENGHT = 6.5;
   
-  private static final double INTAKE_CG_MOMENT_OF_INERTIA = 0.2;
-  private static final double INTAKE_MASS = 3;
+  private static final double INTAKE_CG_MOMENT_OF_INERTIA = 0.05;
+  private static final double INTAKE_LENGTHS = 0.3;
 
   private final DCMotor shoulderMotor = DCMotor.getNEO(1);
   private static final double shoulderGearRadio = 360 * (1.0 / (70.0 * (26.0 / 15.0)));
 
+  private final DCMotor wristMotor = DCMotor.getNeo550(1);
+  private static final double wristGearRadio = 360 * 50;
+
   private SingleJointedArmSim shoulderSim;
+  private SingleJointedArmSim wristSim;
 
   private double inputShoulderPower = 0;
+  private double inputWristPower = 0;
 
   /** Creates a new Arm. */
   public ArmSimIO() {
-
-
     shoulderSim = new SingleJointedArmSim(
     shoulderMotor,
     shoulderGearRadio,
@@ -37,6 +40,15 @@ public class ArmSimIO implements ArmIO {
     false,
     VecBuilder.fill(2.0 * Math.PI / 4096));
 
+    wristSim = new SingleJointedArmSim(
+      wristMotor,
+      wristGearRadio,
+      INTAKE_CG_MOMENT_OF_INERTIA,
+      INTAKE_LENGTHS,
+      Units.degreesToRadians(0),
+      Units.degreesToRadians(120),
+      false,
+      VecBuilder.fill(2.0 * Math.PI / 4096));
   }
 
 
@@ -48,13 +60,13 @@ public class ArmSimIO implements ArmIO {
     inputs.shoulderCurrentDrawAmps = shoulderSim.getCurrentDrawAmps();
     inputs.shoulderAppliedPower = inputShoulderPower;
 
-    inputs.wristAngleDeg = 0;
-    inputs.wristAngularVelDegPerSec = 0;
-    inputs.wristCurrentDrawAmps = 0;
-    inputs.wristAppliedPower = 0;
+    inputs.wristAngleDeg = Units.radiansToDegrees(wristSim.getAngleRads());
+    inputs.wristAngularVelDegPerSec = (wristSim.getVelocityRadPerSec()*360.0)/2.0*Math.PI;
+    inputs.wristCurrentDrawAmps = wristSim.getCurrentDrawAmps();
+    inputs.wristAppliedPower = inputWristPower;
 
     inputs.shoulderLimit = shoulderSim.hasHitLowerLimit();
-    inputs.wristLimit = false;
+    inputs.wristLimit = wristSim.hasHitLowerLimit();
   }
   @Override
   public void setShoulderPower(double power) {
@@ -64,7 +76,9 @@ public class ArmSimIO implements ArmIO {
   }
   @Override
   public void setWristPower(double power) {
-    //armWrist.set(power);
+    inputWristPower = power;
+    wristSim.setInputVoltage(power);
+    shoulderSim.update(0.020);
   }
   @Override
   public void resetShoulderEncoder(){

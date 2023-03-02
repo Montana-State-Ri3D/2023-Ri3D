@@ -1,10 +1,7 @@
-package frc.robot;
+package frc.robot.utility;
 
 public class Joystick {
     public static double JoystickInput(double value, double power, double deadband, double clamp) {
-        if (clamp != 1) {
-            value = Math.max(-clamp, Math.min(value, clamp));
-        }
         if (power != 0) {
             value = Math.copySign(Math.pow(value, power), value);
         }
@@ -18,6 +15,9 @@ public class Joystick {
             } else {
                 value = 0;
             }
+        }
+        if (clamp != 1) {
+            value = Math.max(-clamp, Math.min(value, clamp));
         }
         return value;
     }

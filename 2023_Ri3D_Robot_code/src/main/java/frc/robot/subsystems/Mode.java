@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -12,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Mode extends SubsystemBase {
 
   private ShuffleboardTab tab;
-  private GenericEntry modeTelem;
 
   private Type mode;
 
@@ -26,17 +27,14 @@ public class Mode extends SubsystemBase {
   public Mode() {
     tab = Shuffleboard.getTab("Arm");
     mode = Type.CONE;
-
-    modeTelem = tab.add("Mode", "CONE")
-        .withPosition(1, 0)
-        .withSize(1, 1)
-        .getEntry();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    modeTelem.setString(mode.toString());
+    Logger logger = Logger.getInstance();
+
+    logger.recordOutput("Mode", mode.toString());
   }
 
   public Type getMode() {
