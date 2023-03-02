@@ -11,6 +11,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
+import static frc.robot.Constants.*;
+
 public class ArmRealIO implements ArmIO {
   private DigitalInput shoulderLimit;
   private DigitalInput wristLimit;
@@ -52,7 +54,7 @@ public class ArmRealIO implements ArmIO {
 
     shoulder1Encoder = shoulder1.getEncoder();
 
-    shoulder1Encoder.setPositionConversionFactor(360 * (1.0 / (70.0 * (26.0 / 15.0))));
+    shoulder1Encoder.setPositionConversionFactor(SHOULDER_RADIO);
   }
 
   private void initArmWrist(int armWristID) {
@@ -61,7 +63,7 @@ public class ArmRealIO implements ArmIO {
     armWrist.setIdleMode(IdleMode.kBrake);
     armWristEncoder = armWrist.getEncoder();
 
-    armWristEncoder.setPositionConversionFactor(0.69);
+    armWristEncoder.setPositionConversionFactor(WRIST_RADIO);
   }
   @Override
   public void updateInputs(ArmIOInputs inputs) {
