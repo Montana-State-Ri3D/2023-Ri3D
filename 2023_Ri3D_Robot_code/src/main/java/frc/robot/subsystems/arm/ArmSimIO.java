@@ -9,6 +9,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.math.VecBuilder;
 
+import static frc.robot.Constants.*;
+
 public class ArmSimIO implements ArmIO {
   private static final double ARM_CG_MOMENT_OF_INERTIA = 0.5;
   private static final double ARM_LENGHT = 6.5;
@@ -17,10 +19,10 @@ public class ArmSimIO implements ArmIO {
   private static final double INTAKE_LENGTHS = 0.3;
 
   private final DCMotor shoulderMotor = DCMotor.getNEO(1);
-  private static final double shoulderGearRadio = 360 * (1.0 / (70.0 * (26.0 / 15.0)));
+  private static final double shoulderGearRadio = SHOULDER_RADIO;
 
   private final DCMotor wristMotor = DCMotor.getNeo550(1);
-  private static final double wristGearRadio = 360 * 50;
+  private static final double wristGearRadio = WRIST_RADIO;
 
   private SingleJointedArmSim shoulderSim;
   private SingleJointedArmSim wristSim;

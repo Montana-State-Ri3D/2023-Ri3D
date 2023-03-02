@@ -28,4 +28,9 @@ public final class Constants {
     // Arm DIO
     public static final int SHOULDER_LIMIT = 2;
     public static final int WRIST_LIMIT = 3;
+
+    // Gear Radios
+    public static final double SHOULDER_RADIO = 360 * (1.0 / (70.0 * (26.0 / 15.0)));
+    public static final double WRIST_RADIO = 360*50;
+    public static final double INTAKE_RADIO = 360*7;
 }

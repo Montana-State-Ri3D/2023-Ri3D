@@ -8,11 +8,11 @@ import frc.robot.commands.Dup;
 import frc.robot.commands.InitArm;
 import frc.robot.commands.Ddown;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Mode;
 import frc.robot.subsystems.Mode.Type;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.utility.RobotIdentity;
 import frc.robot.utility.SubsystemFactory;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -56,11 +56,13 @@ public class RobotContainer {
 
     armSubsystem = SubsystemFactory.createArm(identity);
 
-    mode = new Mode();
-
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
+
+    intakeSubsystem = SubsystemFactory.createIntake(identity);
+
+    mode = new Mode();
     
-    intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR, FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
+    
   }
 
   private void createCommands() {

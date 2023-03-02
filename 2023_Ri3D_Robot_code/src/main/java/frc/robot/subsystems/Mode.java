@@ -6,15 +6,9 @@ package frc.robot.subsystems;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Mode extends SubsystemBase {
-
-  private ShuffleboardTab tab;
-
   private Type mode;
 
   public enum Type {
@@ -25,7 +19,6 @@ public class Mode extends SubsystemBase {
 
   /** Creates a new Mode. */
   public Mode() {
-    tab = Shuffleboard.getTab("Arm");
     mode = Type.CONE;
   }
 

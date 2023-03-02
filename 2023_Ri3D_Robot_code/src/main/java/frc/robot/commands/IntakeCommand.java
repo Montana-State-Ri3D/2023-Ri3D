@@ -6,12 +6,12 @@ package frc.robot.commands;
 
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Mode;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class IntakeCommand extends CommandBase {
 
-  private Mode.Type type;
+  public Mode.Type type;
   private boolean broken;
   private IntakeSubsystem subsystem;
   private long startTime;
@@ -23,22 +23,19 @@ public class IntakeCommand extends CommandBase {
     this.type = type;
     this.subsystem = subsystem;
     this.cancel = cancel;
+    broken = false;
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    addRequirements(subsystem);
     if (type == Mode.Type.EJECT){
       subsystem.intakePower(-1);
       startTime = System.currentTimeMillis();
       return;
     }
-
-    broken = false;
-    if(checkDone()) {
-      broken = true;
-    } else {
+    else{
       subsystem.intakePower(0.80);
     }
   }
