@@ -26,12 +26,11 @@ public class RobotContainer {
 
   // Creating Controlers
   @SuppressWarnings({ "unused" })
-  private final CommandXboxController driveController = new CommandXboxController(Constants.DRIVE_CONTROLLER_PORT);
+  private final CommandXboxController driveController = new CommandXboxController(DRIVE_CONTROLLER_PORT);
   @SuppressWarnings({ "unused" })
-  private final CommandXboxController operatorController = new CommandXboxController(
-      Constants.OPERATOR_CONTROLLER_PORT);
+  private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
   @SuppressWarnings({ "unused" })
-  private final CommandXboxController testController = new CommandXboxController(Constants.TEST_CONTROLLER_PORT);
+  private final CommandXboxController testController = new CommandXboxController(TEST_CONTROLLER_PORT);
 
   private DriveTrain driveTrainSubsystem;
   private IntakeSubsystem intakeSubsystem;
@@ -61,18 +60,19 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
 
     mode = new Mode();
-    
-    
+
   }
 
   private void createCommands() {
 
     armManual = new ArmManual(armSubsystem, () -> -operatorController.getLeftY(), () -> operatorController.getRightY());
-    //armSubsystem.setDefaultCommand(armManual);
+    // armSubsystem.setDefaultCommand(armManual);
 
     initArm = new InitArm(armSubsystem);
 
-    driveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> driveController.getLeftX());
+    driveCommand = new DriveCommand(driveTrainSubsystem,
+        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
+        () -> driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
 
     intakeCone = new SequentialCommandGroup();
@@ -111,21 +111,21 @@ public class RobotContainer {
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
     // Eject Item with X
-    driveController.x().onTrue(new IntakeCommand(intakeSubsystem, Type.EJECT, () -> driveController.y().getAsBoolean()));
-
+    driveController.x()
+        .onTrue(new IntakeCommand(intakeSubsystem, Type.EJECT, () -> driveController.y().getAsBoolean()));
 
     // Intake Cone with Right Bumper
     driveController.rightBumper().onTrue(intakeCone);
-    
+
     // Intake Cube wiht Left Bumper
     driveController.leftBumper().onTrue(intakeCube);
-    
+
     // Init Arm
     driveController.start().onTrue(initArm);
-    
+
     // reset base encoder
     operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetShoulderEncoder(), armSubsystem));
-    
+
     // reset writs encoder
     operatorController.back().onTrue(new InstantCommand(() -> armSubsystem.resetWristEncoder(), armSubsystem));
   }

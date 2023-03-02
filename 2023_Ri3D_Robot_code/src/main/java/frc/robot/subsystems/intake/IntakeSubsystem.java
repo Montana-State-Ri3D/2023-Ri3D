@@ -6,9 +6,7 @@ package frc.robot.subsystems.intake;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.IntakeCommand;
 
 public class IntakeSubsystem extends SubsystemBase {
 
@@ -27,7 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
     Logger logger = Logger.getInstance();
 
     logger.processInputs("Intake/Inputs", inputs);
-    System.out.println(this.getCurrentCommand());
+    
     if (this.getCurrentCommand() != null) {
 
       logger.recordOutput("Intake/CurentCommand", this.getCurrentCommand().getName());
