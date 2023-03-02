@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Mode;
-import frc.robot.subsystems.arm.RealArm;
+import frc.robot.subsystems.arm.ArmSubsystem;
 
 public class Dup extends CommandBase {
   /** Creates a new Dup. */
   private Mode mode;
-  private RealArm arm;
+  private ArmSubsystem arm;
   private boolean done;
 
-  public Dup(Mode mode, RealArm arm) {
+  public Dup(Mode mode, ArmSubsystem arm) {
     this.mode = mode;
     this.arm = arm;
     done = false;
@@ -24,9 +24,9 @@ public class Dup extends CommandBase {
   @Override
   public void initialize() {
     if (mode.getMode() == Mode.Type.CONE) {// If Cone
-      arm.setPos(4);
+      arm.setPose(4);
     } else if (mode.getMode() == Mode.Type.CUBE) {// If Cube
-      arm.setPos(14);
+      arm.setPose(14);
     }
     done = true;
   }

@@ -4,18 +4,18 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
-import frc.robot.Joystick;
 
-import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.utility.Joystick;
 
 public class DriveCommand extends CommandBase {
   /** Creates a new DriveCommand. */
-  private final DriveTrainSubsystem subsystem;
+  private final DriveTrain subsystem;
   private final DoubleSupplier xSpeed;
   private final DoubleSupplier zRotation;
   private WheelSpeeds wheelSpeeds;
 
-  public DriveCommand(DriveTrainSubsystem subsystem, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public DriveCommand(DriveTrain subsystem, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     this.subsystem = subsystem;
     this.xSpeed = xSpeed;
     this.zRotation = zRotation;

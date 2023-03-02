@@ -8,11 +8,13 @@ import frc.robot.commands.Dup;
 import frc.robot.commands.InitArm;
 import frc.robot.commands.Ddown;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Mode;
 import frc.robot.subsystems.Mode.Type;
-import frc.robot.subsystems.arm.RealArm;
+import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.drivetrain.DriveTrain;
+import frc.robot.utility.RobotIdentity;
+import frc.robot.utility.SubsystemFactory;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,9 +33,9 @@ public class RobotContainer {
   @SuppressWarnings({ "unused" })
   private final CommandXboxController testController = new CommandXboxController(Constants.TEST_CONTROLLER_PORT);
 
-  private DriveTrainSubsystem driveTrainSubsystem;
+  private DriveTrain driveTrainSubsystem;
   private IntakeSubsystem intakeSubsystem;
-  public RealArm armSubsystem;
+  public ArmSubsystem armSubsystem;
   private Mode mode;
 
   private SequentialCommandGroup intakeCone;
@@ -50,13 +52,15 @@ public class RobotContainer {
   }
 
   private void createSubsystems() {
+    RobotIdentity identity = RobotIdentity.getIdentity();
+
+    armSubsystem = SubsystemFactory.createArm(identity);
+
     mode = new Mode();
 
-    driveTrainSubsystem = new DriveTrainSubsystem(LEFT_FRONT_MOTOR, LEFT_BACK_MOTOR, RIGHT_FRONT_MOTOR,
-        RIGHT_BACK_MOTOR);
+    driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);
+    
     intakeSubsystem = new IntakeSubsystem(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR, FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE);
-
-    armSubsystem = new RealArm(BASE_MOTOR1, BASE_MOTOR2, WRIST_MOTOR, BASE_LIMIT, WRIST_LIMIT);
   }
 
   private void createCommands() {
@@ -66,9 +70,7 @@ public class RobotContainer {
 
     initArm = new InitArm(armSubsystem);
 
-    driveCommand = new DriveCommand(driveTrainSubsystem,
-        () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
-        () -> driveController.getLeftX());
+    driveCommand = new DriveCommand(driveTrainSubsystem,() -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),() -> driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
 
     intakeCone = new SequentialCommandGroup();
@@ -104,16 +106,10 @@ public class RobotContainer {
     // Calls Dleft to move Arm to storage position
     driveController.povLeft().onTrue(new Dleft(mode, armSubsystem));
 
-    //Update PID Arm values
-    driveController.b().onTrue(new InstantCommand(() -> armSubsystem.updatePID(),armSubsystem));
-
     // Toggle Brake Mode with A
     driveController.a().onTrue(new InstantCommand(() -> driveTrainSubsystem.toggleMode(), driveTrainSubsystem));
-    System.out.println("Hello");
     // Eject Item with X
     driveController.x().onTrue(new IntakeCommand(intakeSubsystem, Type.EJECT, () -> driveController.y().getAsBoolean()));
-    
-    // Update PID values
 
 
     // Intake Cone with Right Bumper
@@ -126,11 +122,10 @@ public class RobotContainer {
     driveController.start().onTrue(initArm);
     
     // reset base encoder
-    operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetBaseEncoder(), armSubsystem));
+    operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetShoulderEncoder(), armSubsystem));
     
     // reset writs encoder
     operatorController.back().onTrue(new InstantCommand(() -> armSubsystem.resetWristEncoder(), armSubsystem));
-
   }
 
   public Command getAutonomousCommand() {

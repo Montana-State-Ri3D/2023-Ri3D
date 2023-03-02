@@ -7,15 +7,15 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.arm.RealArm;
+import frc.robot.subsystems.arm.ArmSubsystem;
 
 public class ArmManual extends CommandBase {
   /** Creates a new ArmManual. */
-  private RealArm arm;
+  private ArmSubsystem arm;
   private DoubleSupplier basePower;
   private DoubleSupplier wristPower;
 
-  public ArmManual(RealArm arm, DoubleSupplier basePower,DoubleSupplier wristPower){ 
+  public ArmManual(ArmSubsystem arm, DoubleSupplier basePower,DoubleSupplier wristPower){ 
     this.arm = arm;
     this.basePower = basePower;
     this.wristPower = wristPower;
@@ -31,14 +31,14 @@ public class ArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setBasePower(basePower.getAsDouble()/4);
+    arm.setShoulderPower(basePower.getAsDouble()/4);
     arm.setWristPower(wristPower.getAsDouble()/2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.setBasePower(0);
+    arm.setShoulderPower(0);
     arm.setWristPower(0);
   }
 

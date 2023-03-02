@@ -3,15 +3,5 @@
     "types": {
       "/FMSInfo": "FMSInfo"
     }
-  },
-  "NetworkTables": {
-    "transitory": {
-      "Shuffleboard": {
-        "Arm": {
-          "open": true
-        },
-        "open": true
-      }
-    }
   }
 }
