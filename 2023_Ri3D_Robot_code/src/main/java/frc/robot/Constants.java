@@ -30,7 +30,7 @@ public final class Constants {
     public static final int WRIST_LIMIT = 3;
 
     // Gear Radios
-    public static final double SHOULDER_RADIO = 360.0 * (1.0 / (70.0 * (26.0 / 15.0)));
+    public static final double SHOULDER_RADIO = 360.0 * (1.0 / ((70.0) * (26.0 / 15.0)));
     public static final double WRIST_RADIO = 360.0*(1.0/36.0);
     public static final double INTAKE_RADIO = 360.0*(1.0/7.0);
 }

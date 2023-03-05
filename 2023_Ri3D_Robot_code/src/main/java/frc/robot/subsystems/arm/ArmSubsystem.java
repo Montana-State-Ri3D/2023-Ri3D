@@ -29,28 +29,28 @@ public class ArmSubsystem extends SubsystemBase {
 
   private ProfiledPIDController shoulderPID;
 
-  private PIDController wristPID;
+  private ProfiledPIDController wristPID;
 
-  double ksP = 0.1;
-  double ksI = 0.00;
-  double ksD = 0.0;
-  double ksFF = 0.0;
-  double ksVel = 0.0;
-  double ksAcc = 0.0;
+  private double ksP = 0.1;
+  private double ksI = 0.00;
+  private double ksD = 0.0;
+  private double ksFF = 0.0;
+  private double ksVel = 0.0;
+  private double ksAcc = 0.0;
 
-  double kwP = 0.013;
-  double kwI = 0.0;
-  double kwD = 0.0;
-  double kwFF = 0.0;
-  double kwVel = 0.0;
-  double kwAcc = 0.0;
+  private double kwP = 0.013;
+  private double kwI = 0.0;
+  private double kwD = 0.0;
+  private double kwFF = 0.0;
+  private double kwVel = 0.0;
+  private double kwAcc = 0.0;
 
   /** Creates a new Arm. */
   public ArmSubsystem(ArmIO io) {
     this.io = io;
 
     shoulderPID = new ProfiledPIDController(ksP, ksI, ksD, new TrapezoidProfile.Constraints(ksVel, ksAcc));
-    wristPID = new PIDController(kwP, kwI, kwD);
+    wristPID = new ProfiledPIDController(kwP, kwI, kwD, new TrapezoidProfile.Constraints(kwVel, kwAcc));
 
     makeMaps();
   }

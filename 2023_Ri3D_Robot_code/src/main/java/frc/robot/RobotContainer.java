@@ -1,6 +1,5 @@
 package frc.robot;
 
-import frc.robot.commands.ArmManual;
 import frc.robot.commands.Dleft;
 import frc.robot.commands.Dright;
 import frc.robot.commands.DriveCommand;
@@ -41,7 +40,6 @@ public class RobotContainer {
   private SequentialCommandGroup intakeCube;
 
   private DriveCommand driveCommand;
-  private ArmManual armManual;
   private InitArm initArm;
 
   public RobotContainer() {
@@ -60,13 +58,9 @@ public class RobotContainer {
     intakeSubsystem = SubsystemFactory.createIntake(identity);
 
     mode = new Mode();
-
   }
 
   private void createCommands() {
-
-    armManual = new ArmManual(armSubsystem, () -> -operatorController.getLeftY(), () -> operatorController.getRightY());
-    // armSubsystem.setDefaultCommand(armManual);
 
     initArm = new InitArm(armSubsystem);
 
@@ -121,7 +115,7 @@ public class RobotContainer {
     driveController.leftBumper().onTrue(intakeCube);
 
     // Init Arm
-    driveController.start().onTrue(initArm);
+    //driveController.start().onTrue(initArm);
 
     // reset base encoder
     operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetShoulderEncoder(), armSubsystem));
