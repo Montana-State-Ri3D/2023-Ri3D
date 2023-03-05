@@ -12,13 +12,13 @@ import edu.wpi.first.math.VecBuilder;
 import static frc.robot.Constants.*;
 
 public class ArmSimIO implements ArmIO {
-  private static final double ARM_CG_MOMENT_OF_INERTIA = 0.5;
-  private static final double ARM_LENGHT = 6.5;
+  private static final double ARM_CG_MOMENT_OF_INERTIA = 0.1;
+  private static final double ARM_LENGHT = 5;
   
-  private static final double INTAKE_CG_MOMENT_OF_INERTIA = 0.05;
+  private static final double INTAKE_CG_MOMENT_OF_INERTIA = 0.005;
   private static final double INTAKE_LENGTHS = 0.3;
 
-  private final DCMotor shoulderMotor = DCMotor.getNEO(1);
+  private final DCMotor shoulderMotor = DCMotor.getNEO(2);
   private static final double shoulderGearRadio = SHOULDER_RADIO;
 
   private final DCMotor wristMotor = DCMotor.getNeo550(1);
@@ -39,7 +39,7 @@ public class ArmSimIO implements ArmIO {
     ARM_LENGHT,
     Units.degreesToRadians(0),
     Units.degreesToRadians(120),
-    false,
+    true,
     VecBuilder.fill(2.0 * Math.PI / 4096));
 
     wristSim = new SingleJointedArmSim(

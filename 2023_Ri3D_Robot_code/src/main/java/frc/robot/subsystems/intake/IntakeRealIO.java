@@ -10,6 +10,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
+import static frc.robot.Constants.*;
+
 /** Add your docs here. */
 public class IntakeRealIO implements IntakeIO {
 
@@ -18,12 +20,12 @@ public class IntakeRealIO implements IntakeIO {
     private DigitalInput cubeBeam;
     private DigitalInput coneBeam;
 
-    public IntakeRealIO(int leftMotorID, int rightMotorID, int frontBeamID, int backBeamID) {
-        cubeBeam = new DigitalInput(frontBeamID);
-        coneBeam = new DigitalInput(backBeamID);
+    public IntakeRealIO() {
+        cubeBeam = new DigitalInput(FRONT_BEAM_BRAKE);
+        coneBeam = new DigitalInput(BACK_BEAM_BRAKE);
 
-        rightMotor = new CANSparkMax(rightMotorID, MotorType.kBrushless);
-        leftMotor = new CANSparkMax(leftMotorID, MotorType.kBrushless);
+        rightMotor = new CANSparkMax(INTAKE_RIGHT_MOTOR, MotorType.kBrushless);
+        leftMotor = new CANSparkMax(INTAKE_LEFT_MOTOR, MotorType.kBrushless);
 
         leftMotor.setIdleMode(IdleMode.kBrake);
         rightMotor.setIdleMode(IdleMode.kBrake);

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,9 +33,11 @@ public class ArmSubsystem extends SubsystemBase {
   private double ksP = 0.1;
   private double ksI = 0.00;
   private double ksD = 0.0;
-  private double ksFF = 0.0;
   private double ksVel = 0.0;
   private double ksAcc = 0.0;
+  private double kVertAngle = 60;
+  private double kFrontP = 0.0000;// P Value whne the arm is forwards
+  private double kBackP =  0.0000;// P vale for when the arm is backwards
 
   private double kwP = 0.013;
   private double kwI = 0.0;
@@ -93,10 +94,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     logger.recordOutput("Arm/Pose", pose);
 
-    double shoulderPower = MathUtil.clamp(shoulderPID.calculate(inputs.shoulderAngleDeg, shoulderPos.get(pose)), -0.25,
-        0.25) + ksFF;
+    double shoulderPIDOut = shoulderPID.calculate(inputs.shoulderAngleDeg, shoulderPos.get(pose));
+
+    double shoulderPower = MathUtil.clamp(shoulderPIDOut + dynamicFFCalculate(), -0.25,0.25);
+
     double wristPower = MathUtil.clamp(wristPID.calculate(inputs.wristAngleDeg, wristPos.get(pose)), -0.25, 0.25)
         + kwFF;
+
+    logger.recordOutput("Arm/ShoulderPIDOut", shoulderPIDOut);
     logger.recordOutput("Arm/ShoulderPower", shoulderPower);
     logger.recordOutput("Arm/WristPower", wristPower);
 
@@ -105,6 +110,20 @@ public class ArmSubsystem extends SubsystemBase {
 
     io.setShoulderPower(shoulderPower);
     io.setWristPower(wristPower);
+  }
+
+  public double dynamicFFCalculate() {
+    double offCenter = inputs.shoulderAngleDeg - kVertAngle;
+    Logger logger = Logger.getInstance();
+    double ff = 0.0;
+    if (offCenter > 0.0) {
+      ff = -kFrontP * offCenter;
+    } else {
+      ff = -kBackP * offCenter;
+    }
+
+    logger.recordOutput("Arm/ShoulderFF", ff);
+    return ff;
   }
 
   public void setPose(int pos) {

@@ -20,7 +20,7 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new ArmSubsystem(new ArmSimIO());
             default:
-                return new ArmSubsystem(new ArmRealIO(SHOULDER_MOTOR1, SHOULDER_MOTOR2, WRIST_MOTOR, SHOULDER_LIMIT, WRIST_LIMIT));
+                return new ArmSubsystem(new ArmRealIO());
         }
     }
     public static DriveTrain createDriveTrain(RobotIdentity identity) {
@@ -36,7 +36,7 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new IntakeSubsystem(new IntakeSimIO());
             default:
-                return new IntakeSubsystem(new IntakeRealIO(INTAKE_LEFT_MOTOR, INTAKE_RIGHT_MOTOR, FRONT_BEAM_BRAKE, BACK_BEAM_BRAKE));
+                return new IntakeSubsystem(new IntakeRealIO());
         }
     }
 }

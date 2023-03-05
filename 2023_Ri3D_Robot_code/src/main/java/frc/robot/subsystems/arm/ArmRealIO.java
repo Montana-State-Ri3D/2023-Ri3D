@@ -24,13 +24,13 @@ public class ArmRealIO implements ArmIO {
   private CANSparkMax wristMotor;
   private RelativeEncoder wristEncoder;
 
-  public ArmRealIO(int armShoulder1ID, int armShoulder2ID, int armWristID, int shoulderLimitID, int wristLimitID) {
+  public ArmRealIO() {
 
-    shoulderLimit = new DigitalInput(shoulderLimitID);
-    wristLimit = new DigitalInput(wristLimitID);
+    shoulderLimit = new DigitalInput(SHOULDER_LIMIT);
+    wristLimit = new DigitalInput(WRIST_LIMIT);
 
-    initArmBase(armShoulder1ID, armShoulder2ID);
-    initArmWrist(armWristID);
+    initArmBase(SHOULDER_MOTOR1, SHOULDER_MOTOR2);
+    initArmWrist(WRIST_MOTOR);
 
   }
 

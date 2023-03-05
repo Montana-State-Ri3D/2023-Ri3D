@@ -9,7 +9,8 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
-/** Add your docs here. */
+import static frc.robot.Constants.*;
+
 public class DriveTrainRealIO implements DriveTrainIO {
 
     private TalonSRX leftMotor_1;
@@ -20,10 +21,10 @@ public class DriveTrainRealIO implements DriveTrainIO {
     private boolean isBrake;
 
     public DriveTrainRealIO(int IDleftMotor_1, int IDleftMotor_2, int IDrightMotor_1, int IDrightMotor_2) {
-        leftMotor_1 = new TalonSRX(IDleftMotor_1);
-        leftMotor_2 = new TalonSRX(IDleftMotor_2);
-        rightMotor_1 = new TalonSRX(IDrightMotor_1);
-        rightMotor_2 = new TalonSRX(IDrightMotor_2);
+        leftMotor_1 = new TalonSRX(LEFT_FRONT_MOTOR);
+        leftMotor_2 = new TalonSRX(LEFT_BACK_MOTOR);
+        rightMotor_1 = new TalonSRX(RIGHT_FRONT_MOTOR);
+        rightMotor_2 = new TalonSRX(RIGHT_BACK_MOTOR);
 
         TalonSRXConfiguration config = new TalonSRXConfiguration();
         config.peakCurrentLimit = 15;
