@@ -9,7 +9,6 @@ import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -117,22 +116,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setShoulderPower(double basePower) {
     io.setShoulderPower(basePower);
-  }
-
-  public void resetWristEncoder() {
-    io.resetWristEncoder();
-  }
-
-  public void resetShoulderEncoder() {
-    io.resetShoulderEncoder();
-  }
-
-  public boolean getWristLimit() {
-    return !inputs.wristLimit;
-  }
-
-  public boolean getShoulderLimit() {
-    return !inputs.shoulderLimit;
   }
 
 }

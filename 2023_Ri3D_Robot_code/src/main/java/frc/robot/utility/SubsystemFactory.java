@@ -20,7 +20,7 @@ public final class SubsystemFactory {
             case SIMULATION:
                 return new ArmSubsystem(new ArmSimIO());
             default:
-                return new ArmSubsystem(new ArmRealIO(SHOULDER_MOTOR1, SHOULDER_MOTOR2, WRIST_MOTOR, SHOULDER_LIMIT, WRIST_LIMIT));
+                return new ArmSubsystem(new ArmRealIO());
         }
     }
     public static DriveTrain createDriveTrain(RobotIdentity identity) {

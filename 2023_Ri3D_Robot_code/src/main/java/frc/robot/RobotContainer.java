@@ -4,7 +4,6 @@ import frc.robot.commands.Dleft;
 import frc.robot.commands.Dright;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Dup;
-import frc.robot.commands.InitArm;
 import frc.robot.commands.Ddown;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Mode;
@@ -40,7 +39,6 @@ public class RobotContainer {
   private SequentialCommandGroup intakeCube;
 
   private DriveCommand driveCommand;
-  private InitArm initArm;
 
   public RobotContainer() {
     createSubsystems(); // Create our subsystems.
@@ -61,8 +59,6 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-
-    initArm = new InitArm(armSubsystem);
 
     driveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
@@ -113,15 +109,6 @@ public class RobotContainer {
 
     // Intake Cube wiht Left Bumper
     driveController.leftBumper().onTrue(intakeCube);
-
-    // Init Arm
-    //driveController.start().onTrue(initArm);
-
-    // reset base encoder
-    operatorController.start().onTrue(new InstantCommand(() -> armSubsystem.resetShoulderEncoder(), armSubsystem));
-
-    // reset writs encoder
-    operatorController.back().onTrue(new InstantCommand(() -> armSubsystem.resetWristEncoder(), armSubsystem));
   }
 
   public Command getAutonomousCommand() {

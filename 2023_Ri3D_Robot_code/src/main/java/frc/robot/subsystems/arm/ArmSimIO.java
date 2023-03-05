@@ -66,9 +66,6 @@ public class ArmSimIO implements ArmIO {
     inputs.wristAngularVelDegPerSec = (wristSim.getVelocityRadPerSec()*360.0)/2.0*Math.PI;
     inputs.wristCurrentDrawAmps = wristSim.getCurrentDrawAmps();
     inputs.wristAppliedPower = inputWristPower;
-
-    inputs.shoulderLimit = shoulderSim.hasHitLowerLimit();
-    inputs.wristLimit = wristSim.hasHitLowerLimit();
   }
   @Override
   public void setShoulderPower(double power) {
@@ -82,11 +79,4 @@ public class ArmSimIO implements ArmIO {
     wristSim.setInputVoltage(power);
     shoulderSim.update(0.020);
   }
-  @Override
-  public void resetShoulderEncoder(){
-  }
-  @Override
-  public void resetWristEncoder(){
-  }
-
 }

@@ -19,15 +19,8 @@ public interface ArmIO {
         public double wristAngularVelDegPerSec;
         public double wristCurrentDrawAmps;
         public double wristAppliedPower;
-
-        public boolean shoulderLimit;
-        public boolean wristLimit;
     }
 
-    default void resetShoulderEncoder(){
-    }
-    default void resetWristEncoder(){
-    }
     default void updateInputs(ArmIOInputs inputs){
     }
     default void setShoulderPower(double power) {

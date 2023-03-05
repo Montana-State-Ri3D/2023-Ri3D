@@ -6,32 +6,25 @@ package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import static frc.robot.Constants.*;
 
 public class ArmRealIO implements ArmIO {
-  private DigitalInput shoulderLimit;
-  private DigitalInput wristLimit;
 
   private CANSparkMax shoulder1;
   private CANSparkMax shoulder2;
-  private RelativeEncoder shoulder1Encoder;
+  private SparkMaxAbsoluteEncoder shoulder1Encoder;
 
   private CANSparkMax wristMotor;
   private RelativeEncoder wristEncoder;
 
-  public ArmRealIO(int armShoulder1ID, int armShoulder2ID, int armWristID, int shoulderLimitID, int wristLimitID) {
-
-    shoulderLimit = new DigitalInput(shoulderLimitID);
-    wristLimit = new DigitalInput(wristLimitID);
-
-    initArmBase(armShoulder1ID, armShoulder2ID);
-    initArmWrist(armWristID);
-
+  public ArmRealIO() {
+    initArmBase(SHOULDER_MOTOR1, SHOULDER_MOTOR2);
+    initArmWrist(WRIST_MOTOR);
   }
 
   private void initArmBase(int armShoulder1ID, int armShoulder2ID) {
@@ -51,9 +44,10 @@ public class ArmRealIO implements ArmIO {
 
     shoulder1.setInverted(true);
 
-    shoulder1Encoder = shoulder1.getEncoder();
+    shoulder1Encoder = shoulder1.getAbsoluteEncoder(Type.kDutyCycle);
 
     shoulder1Encoder.setPositionConversionFactor(SHOULDER_RADIO);
+    shoulder1Encoder.setZeroOffset(SHOULDER_OFFSET);
   }
 
   private void initArmWrist(int armWristID) {
@@ -67,7 +61,9 @@ public class ArmRealIO implements ArmIO {
     wristMotor.setInverted(true);
 
     wristEncoder.setPositionConversionFactor(WRIST_RADIO);
+    shoulder1Encoder.setZeroOffset(WRIST_OFFSET);
   }
+
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     inputs.shoulderAngleDeg = shoulder1Encoder.getPosition();
@@ -79,25 +75,15 @@ public class ArmRealIO implements ArmIO {
     inputs.wristAngularVelDegPerSec = wristEncoder.getVelocity();
     inputs.wristCurrentDrawAmps = wristMotor.getOutputCurrent();
     inputs.wristAppliedPower = wristMotor.getAppliedOutput();
-
-    inputs.shoulderLimit = shoulderLimit.get();
-    inputs.wristLimit = wristLimit.get();
   }
+
   @Override
   public void setShoulderPower(double power) {
     shoulder1.set(power);
   }
+
   @Override
   public void setWristPower(double power) {
     wristMotor.set(power);
   }
-  @Override
-  public void resetShoulderEncoder(){
-    shoulder1Encoder.setPosition(0);
-  }
-  @Override
-  public void resetWristEncoder(){
-    wristEncoder.setPosition(0);
-  }
-
 }

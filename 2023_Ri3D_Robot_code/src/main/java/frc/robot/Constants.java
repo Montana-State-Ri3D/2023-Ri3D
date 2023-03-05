@@ -21,16 +21,16 @@ public final class Constants {
     public static final int FRONT_BEAM_BRAKE = 0;
     public static final int BACK_BEAM_BRAKE = 1;
 
-    //Arm Motors
+    // Arm Motors
     public static final int SHOULDER_MOTOR1 = 10;
     public static final int SHOULDER_MOTOR2 = 11;
     public static final int WRIST_MOTOR = 12;
-    // Arm DIO
-    public static final int SHOULDER_LIMIT = 2;
-    public static final int WRIST_LIMIT = 3;
+    // Arm Encoder Ofsets
+    public static final double SHOULDER_OFFSET = 0.0;
+    public static final double WRIST_OFFSET = 0.0;
 
     // Gear Radios
-    public static final double SHOULDER_RADIO = 360.0 * (1.0 / ((70.0) * (26.0 / 15.0)));
-    public static final double WRIST_RADIO = 360.0*(1.0/36.0);
-    public static final double INTAKE_RADIO = 360.0*(1.0/7.0);
+    public static final double SHOULDER_RADIO = 360.0 * (1.0 / (26.0 / 15.0));
+    public static final double WRIST_RADIO = 360.0 * (1.0 / 36.0);
+    public static final double INTAKE_RADIO = 360.0 * (1.0 / 7.0);
 }
