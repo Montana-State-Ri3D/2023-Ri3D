@@ -63,6 +63,10 @@ public class ArmRealIO implements ArmIO {
     armWrist.setIdleMode(IdleMode.kBrake);
     armWristEncoder = armWrist.getEncoder();
 
+    armWrist.setSmartCurrentLimit(25);
+
+    armWrist.setInverted(true);
+
     armWristEncoder.setPositionConversionFactor(WRIST_RADIO);
   }
   @Override
@@ -74,8 +78,8 @@ public class ArmRealIO implements ArmIO {
 
     inputs.wristAngleDeg = armWristEncoder.getPosition();
     inputs.wristAngularVelDegPerSec = armWristEncoder.getVelocity();
-    inputs.wristCurrentDrawAmps = shoulder1.getOutputCurrent();
-    inputs.wristAppliedPower = shoulder1.getAppliedOutput();
+    inputs.wristCurrentDrawAmps = armWrist.getOutputCurrent();
+    inputs.wristAppliedPower = armWrist.getAppliedOutput();
 
     inputs.shoulderLimit = shoulderLimit.get();
     inputs.wristLimit = wristLimit.get();

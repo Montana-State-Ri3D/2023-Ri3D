@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,16 +29,16 @@ public class ArmSubsystem extends SubsystemBase {
 
   private ProfiledPIDController shoulderPID;
 
-  private ProfiledPIDController wristPID;
+  private PIDController wristPID;
 
-  double ksP = 0.05;
+  double ksP = 0.1;
   double ksI = 0.00;
-  double ksD = 0.05;
+  double ksD = 0.0;
   double ksFF = 0.0;
   double ksVel = 0.0;
   double ksAcc = 0.0;
 
-  double kwP = 0.0;
+  double kwP = 0.013;
   double kwI = 0.0;
   double kwD = 0.0;
   double kwFF = 0.0;
@@ -49,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
     this.io = io;
 
     shoulderPID = new ProfiledPIDController(ksP, ksI, ksD, new TrapezoidProfile.Constraints(ksVel, ksAcc));
-    wristPID = new ProfiledPIDController(kwP, kwI, kwD, new TrapezoidProfile.Constraints(kwVel, kwAcc));
+    wristPID = new PIDController(kwP, kwI, kwD);
 
     makeMaps();
   }
@@ -61,25 +62,25 @@ public class ArmSubsystem extends SubsystemBase {
     shoulderPos.put(1, 0.0);// Storage //Cones
     shoulderPos.put(2, 0.0);// Low Place
     shoulderPos.put(3, 0.0);// Mid Place
-    shoulderPos.put(4, 60.0);// High Place
+    shoulderPos.put(4, 70.0);// High Place
 
     shoulderPos.put(11, 0.0);// Storage //Cubes
     shoulderPos.put(12, 0.0);// Low Place
     shoulderPos.put(13, 0.0);// Mid Place
-    shoulderPos.put(14, 0.0);// High Place
+    shoulderPos.put(14, 70.0);// High Place
 
     wristPos = new HashMap<>();
     wristPos.put(0, 0.0);
 
     wristPos.put(1, 0.0);// Storage //Cones
-    wristPos.put(2, 0.0);// Low Place
+    wristPos.put(2, 90.0);// Low Place
     wristPos.put(3, 0.0);// Mid Place
-    wristPos.put(4, 60.0);// High Place
+    wristPos.put(4, 110.0);// High Place
 
     wristPos.put(11, 0.0);// Storage //Cubes
-    wristPos.put(12, 0.0);// Low Place
+    wristPos.put(12, 90.0);// Low Place
     wristPos.put(13, 0.0);// Mid Place
-    wristPos.put(14, 0.0);// High Place
+    wristPos.put(14, 110.0);// High Place
   }
 
   @Override
@@ -96,7 +97,6 @@ public class ArmSubsystem extends SubsystemBase {
         0.25) + ksFF;
     double wristPower = MathUtil.clamp(wristPID.calculate(inputs.wristAngleDeg, wristPos.get(pose)), -0.25, 0.25)
         + kwFF;
-
     logger.recordOutput("Arm/ShoulderPower", shoulderPower);
     logger.recordOutput("Arm/WristPower", wristPower);
 
@@ -133,10 +133,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean getShoulderLimit() {
     return !inputs.shoulderLimit;
-  }
-
-  public void updatePID() {
-
   }
 
 }

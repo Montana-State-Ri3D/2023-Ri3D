@@ -30,7 +30,7 @@ public class IntakeRealIO implements IntakeIO {
 
         rightMotor.follow(leftMotor, true);
 
-        int curentLimit = 40;
+        int curentLimit = 20;
         rightMotor.setSmartCurrentLimit(curentLimit);
         leftMotor.setSmartCurrentLimit(curentLimit);
     }
