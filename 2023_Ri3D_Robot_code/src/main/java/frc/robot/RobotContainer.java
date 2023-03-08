@@ -4,7 +4,6 @@ import frc.robot.commands.Dleft;
 import frc.robot.commands.Dright;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Dup;
-import frc.robot.commands.InitArm;
 import frc.robot.commands.Ddown;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Mode;
@@ -40,7 +39,6 @@ public class RobotContainer {
   private SequentialCommandGroup intakeCube;
 
   private DriveCommand driveCommand;
-  private InitArm initArm;
 
   public RobotContainer() {
     createSubsystems(); // Create our subsystems.
@@ -61,9 +59,6 @@ public class RobotContainer {
   }
 
   private void createCommands() {
-
-    initArm = new InitArm(armSubsystem);
-
 
     driveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
