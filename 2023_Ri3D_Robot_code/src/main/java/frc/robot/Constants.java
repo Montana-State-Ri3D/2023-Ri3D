@@ -14,7 +14,7 @@ public final class Constants {
     public static final int RIGHT_FRONT_MOTOR = 3;
     public static final int RIGHT_BACK_MOTOR = 4;
 
-    // Intake Motors
+    // Intake Motore
     public static final int INTAKE_LEFT_MOTOR = 8;
     public static final int INTAKE_RIGHT_MOTOR = 7;
     // Intake DIO
@@ -31,6 +31,6 @@ public final class Constants {
 
     // Gear Radios
     public static final double SHOULDER_RADIO = 360.0 * (1.0 / ((70.0) * (26.0 / 15.0)));
-    public static final double WRIST_RADIO = 360.0*(1.0/36.0);
+    public static final double WRIST_RADIO = 360.0*(1.0/40.0);
     public static final double INTAKE_RADIO = 360.0*(1.0/7.0);
 }

@@ -62,7 +62,7 @@ public class ArmRealIO implements ArmIO {
     wristMotor.setIdleMode(IdleMode.kBrake);
     wristEncoder = wristMotor.getEncoder();
 
-    wristMotor.setSmartCurrentLimit(25);
+    wristMotor.setSmartCurrentLimit(30);
 
     wristMotor.setInverted(true);
 

@@ -21,8 +21,6 @@ public class DriveTrain extends SubsystemBase {
     Logger logger = Logger.getInstance();
 
     logger.processInputs("DriveTrain/Inputs", inputs);
-
-    
   }
 
   public void drive(double leftPower, double rightPower) {

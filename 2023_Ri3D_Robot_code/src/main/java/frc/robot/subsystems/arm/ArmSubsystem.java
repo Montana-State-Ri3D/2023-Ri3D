@@ -39,11 +39,11 @@ public class ArmSubsystem extends SubsystemBase {
   private double kFrontP = 0.0000;// P Value whne the arm is forwards
   private double kBackP =  0.0000;// P vale for when the arm is backwards
 
-  private double kwP = 0.013;
-  private double kwI = 0.0;
+  private double kwP = 0.017;
+  private double kwI = 0.00001;
   private double kwD = 0.0;
   private double kwFF = 0.0;
-  private double kwVel = 0.0;
+  private double kwVel = 1500.0;
   private double kwAcc = 0.0;
 
   /** Creates a new Arm. */
@@ -62,7 +62,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     shoulderPos.put(1, 0.0);// Storage //Cones
     shoulderPos.put(2, 0.0);// Low Place
-    shoulderPos.put(3, 0.0);// Mid Place
+    shoulderPos.put(3, 90.0);// Mid Place
     shoulderPos.put(4, 70.0);// High Place
 
     shoulderPos.put(11, 0.0);// Storage //Cubes
@@ -98,7 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     double shoulderPower = MathUtil.clamp(shoulderPIDOut + dynamicFFCalculate(), -0.25,0.25);
 
-    double wristPower = MathUtil.clamp(wristPID.calculate(inputs.wristAngleDeg, wristPos.get(pose)), -0.25, 0.25)
+    double wristPower = MathUtil.clamp(wristPID.calculate(inputs.wristAngleDeg, wristPos.get(pose)), -0.5, 0.5)
         + kwFF;
 
     logger.recordOutput("Arm/ShoulderPIDOut", shoulderPIDOut);
