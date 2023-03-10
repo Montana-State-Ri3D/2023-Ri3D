@@ -38,7 +38,7 @@ public class Robot extends LoggedRobot {
     // autonomous chooser on the dashboard.
 
 
-    Logger logger = AdvantageKitHelper.setupLogger(false);
+    Logger logger = AdvantageKitHelper.setupLogger();
 
     logger.recordMetadata("RobotIdentity", RobotIdentity.getIdentity().toString());
 
