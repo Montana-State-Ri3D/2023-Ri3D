@@ -10,6 +10,8 @@ public class DriveTrain extends SubsystemBase {
 
   private DriveTrainIO io;
 
+  private Logger logger = Logger.getInstance();
+
   public DriveTrain(DriveTrainIO io) {
     this.io = io;
   }
@@ -24,7 +26,6 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void drive(double leftPower, double rightPower) {
-    Logger logger = Logger.getInstance();
 
     io.drive(leftPower, rightPower);
 

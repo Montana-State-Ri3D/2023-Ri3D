@@ -40,15 +40,17 @@ public class RobotContainer {
 
   private DriveCommand driveCommand;
 
+  private RobotIdentity identity;
+
   public RobotContainer() {
+    identity = RobotIdentity.getIdentity();
+
     createSubsystems(); // Create our subsystems.
     createCommands(); // Create our commands
     configureButtonBindings(); // Configure the button bindings
   }
 
   private void createSubsystems() {
-    RobotIdentity identity = RobotIdentity.getIdentity();
-
     armSubsystem = SubsystemFactory.createArm(identity);
 
     driveTrainSubsystem = SubsystemFactory.createDriveTrain(identity);

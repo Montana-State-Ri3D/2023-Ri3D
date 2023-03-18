@@ -33,4 +33,5 @@ public final class Constants {
     public static final double SHOULDER_RADIO = 360.0 * (1.0 / ((70.0) * (26.0 / 15.0)));
     public static final double WRIST_RADIO = 360.0*(1.0/40.0);
     public static final double INTAKE_RADIO = 360.0*(1.0/7.0);
+    public static final double DRIVE_RADIO = 360.0*(1.0/8.0);
 }
