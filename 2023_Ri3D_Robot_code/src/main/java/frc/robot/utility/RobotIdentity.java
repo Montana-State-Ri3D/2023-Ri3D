@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 public enum RobotIdentity {
     ROBOT_2023,
     SIMULATION;
-
-
     /**
      * Gets the identity of the robot.
      *
