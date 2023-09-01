@@ -64,7 +64,7 @@ public class RobotContainer {
 
     driveCommand = new DriveCommand(driveTrainSubsystem,
         () -> driveController.getLeftTriggerAxis() - driveController.getRightTriggerAxis(),
-        () -> driveController.getLeftX());
+        () -> -driveController.getLeftX());
     driveTrainSubsystem.setDefaultCommand(driveCommand);
 
     intakeCone = new SequentialCommandGroup();
